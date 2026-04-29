@@ -336,13 +336,21 @@
             .mobile-menu { top: 70px; }
         }
 
+        /* ── FIX: Mobile notification dropdown stays within viewport ── */
         @media (max-width: 768px) {
             .navbar { padding: 0 16px; height: 64px; }
             .nav-grid { height: 64px; }
             .admin-logo { height: 50px !important; }
             .mobile-menu { top: 64px; }
-            .notif-dropdown { width: calc(100vw - 32px); right: -8px; }
             .content { padding: 20px 16px; }
+
+            .notif-dropdown {
+                position: fixed;
+                top: 72px;
+                left: 12px;
+                right: 12px;
+                width: auto;
+            }
         }
 
         @media (max-width: 480px) {
@@ -351,6 +359,12 @@
             .profile-btn, .profile-img { width: 38px; height: 38px; }
             .nav-right { gap: 8px; }
             .content { padding: 16px 12px; }
+
+            .notif-dropdown {
+                top: 66px;
+                left: 8px;
+                right: 8px;
+            }
         }
     </style>
 </head>

@@ -180,6 +180,7 @@
                                      style="object-fit:cover;">
                                 <p class="photo-label mb-2">Profile Photo</p>
                                 <input type="file" class="form-control mt-1" name="profile_picture"
+                                       accept="image/jpeg,image/png,image/gif,image/webp,image/bmp,image/svg+xml"
                                        style="max-width:320px; margin:0 auto;">
                             </div>
 

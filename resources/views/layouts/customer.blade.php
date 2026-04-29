@@ -326,15 +326,23 @@
             .nav-link { font-size: 0.88rem; }
         }
 
+        /* ── FIX: Mobile notification dropdown stays within viewport ── */
         @media (max-width: 768px) {
             .navbar { padding: 0 16px; height: 64px; }
             .nav-grid { grid-template-columns: 1fr auto; height: 64px; }
             .nav-center-wrapper { display: none; }
             .hamburger-btn { display: flex; }
             .customer-logo { height: 52px !important; }
-            .notif-dropdown { width: calc(100vw - 32px); right: -8px; }
             .mobile-menu { top: 64px; }
             .nav-link.active::after { display: none; }
+
+            .notif-dropdown {
+                position: fixed;
+                top: 72px;
+                left: 12px;
+                right: 12px;
+                width: auto;
+            }
         }
 
         @media (max-width: 480px) {
@@ -342,6 +350,12 @@
             .icon-btn { width: 38px; height: 38px; }
             .profile-btn, .profile-img { width: 38px; height: 38px; }
             .nav-right { gap: 8px; }
+
+            .notif-dropdown {
+                top: 66px;
+                left: 8px;
+                right: 8px;
+            }
         }
     </style>
 </head>
