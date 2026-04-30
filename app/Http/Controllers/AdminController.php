@@ -116,6 +116,7 @@ class AdminController extends Controller
 
     public function storeDestination(Request $request)
     {
+        // REMOVED 'name' FROM VALIDATION
         $data = $request->validate([
             'country'     => 'required|string|max:255',
             'title'       => 'nullable|string|max:255',
@@ -161,10 +162,6 @@ class AdminController extends Controller
         return back()->with('success', 'Destination updated successfully!');
     }
 
-    /**
-     * AJAX check — called before showing the archive confirm dialog.
-     * Returns how many active packages belong to this destination.
-     */
     public function checkBeforeArchive(Destination $destination)
     {
         $activePackages = $destination->packages()
@@ -173,25 +170,20 @@ class AdminController extends Controller
 
         return response()->json([
             'has_active_packages' => $activePackages > 0,
-            'active_count'        => $activePackages,
+            'active_count'         => $activePackages,
         ]);
     }
 
-    /**
-     * Soft-delete (archive) a destination.
-     * All related packages are soft-deleted and set to inactive too.
-     */
     public function destroyDestination(Request $request, $id)
     {
         $destination = Destination::findOrFail($id);
 
-        // Archive & deactivate all related packages
         $destination->packages()->each(function ($package) {
             $package->update(['status' => 'inactive']);
-            $package->delete(); // SoftDeletes → sets deleted_at
+            $package->delete(); 
         });
 
-        $destination->delete(); // SoftDeletes → sets deleted_at
+        $destination->delete(); 
 
         return back()->with('success', 'Destination archived. All related packages have been archived and made inactive.');
     }
@@ -202,8 +194,6 @@ class AdminController extends Controller
 
     public function packages()
     {
-        // withTrashed on destination so the name still shows on the package row
-        // even if the destination was archived after the package was created.
         $packages     = Package::with(['destination' => fn($q) => $q->withTrashed()])->get();
         $destinations = Destination::where('status', 'active')->get();
 
@@ -286,17 +276,12 @@ class AdminController extends Controller
         return back()->with('success', 'Package updated successfully!');
     }
 
-    /**
-     * Soft-delete (archive) a package.
-     * Archiving is ALWAYS allowed — existing bookings remain valid and untouched.
-     * Only force-delete (permanent) is blocked when bookings exist.
-     */
     public function destroyPackage($id)
     {
         $package = Package::findOrFail($id);
 
         $package->update(['status' => 'inactive']);
-        $package->delete(); // SoftDeletes → sets deleted_at
+        $package->delete(); 
 
         return back()->with('success', "Package \"{$package->name}\" has been archived. Existing bookings are unaffected.");
     }
@@ -317,11 +302,11 @@ class AdminController extends Controller
     {
         $package = Package::findOrFail($id);
 
-        // Prevent activating a package whose destination is archived
         if ($package->status === 'inactive') {
             $destination = Destination::withTrashed()->find($package->destination_id);
             if ($destination && $destination->trashed()) {
-                return back()->with('error', "Cannot activate \"{$package->name}\" because its destination \"{$destination->name}\" is archived. Restore the destination first.");
+                // CHANGED $destination->name TO $destination->country
+                return back()->with('error', "Cannot activate \"{$package->name}\" because its destination \"{$destination->country}\" is archived. Restore the destination first.");
             }
         }
 
@@ -336,7 +321,6 @@ class AdminController extends Controller
         $package->is_featured = !$package->is_featured;
         $package->save();
 
-        // Only notify customers when featuring (turning ON)
         if ($package->is_featured) {
             $customers = User::where('role', 'customer')->get();
             foreach ($customers as $customer) {
@@ -359,7 +343,6 @@ class AdminController extends Controller
         $destination->is_popular = !$destination->is_popular;
         $destination->save();
 
-        // Only notify customers when marking as popular (turning ON)
         if ($destination->is_popular) {
             $customers = User::where('role', 'customer')->get();
             foreach ($customers as $customer) {
@@ -367,7 +350,8 @@ class AdminController extends Controller
                     $customer->id,
                     'destination',
                     '⭐ New Popular Destination!',
-                    "{$destination->name} has been highlighted as a popular destination. Check it out!",
+                    // CHANGED $destination->name TO $destination->country
+                    "{$destination->country} has been highlighted as a popular destination. Check it out!",
                     route('customer.landing') . '#destinations'
                 );
             }
