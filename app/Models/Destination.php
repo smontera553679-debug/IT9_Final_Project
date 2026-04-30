@@ -11,7 +11,6 @@ class Destination extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'name',
         'country',
         'title', 
         'status', 

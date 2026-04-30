@@ -115,24 +115,23 @@ class AdminController extends Controller
     }
 
     public function storeDestination(Request $request)
-{
-    $data = $request->validate([
-        'country'     => 'required|string|max:255',
-        'title'       => 'nullable|string|max:255',
-        'status'      => 'required|in:active,inactive',
-        'description' => 'required',
-        'image'       => 'nullable|image|max:4096',
-    ]);
+    {
+        // REMOVED 'name' FROM VALIDATION
+        $data = $request->validate([
+            'country'     => 'required|string|max:255',
+            'title'       => 'nullable|string|max:255',
+            'status'      => 'required|in:active,inactive',
+            'description' => 'required',
+            'image'       => 'nullable|image|max:4096',
+        ]);
 
-    if ($request->hasFile('image')) {
-        $data['image'] = $request->file('image')->store('destinations', 'public');
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('destinations', 'public');
+        }
+
+        Destination::create($data);
+        return back()->with('success', 'Destination Added Successfully!');
     }
-
-    $data['name'] = $request->title ?? $request->country; // fix for production DB
-
-    Destination::create($data);
-    return back()->with('success', 'Destination Added Successfully!');
-}
 
     public function editDestination($id)
     {
@@ -141,28 +140,27 @@ class AdminController extends Controller
     }
 
     public function updateDestination(Request $request, $id)
-{
-    $request->validate([
-        'country'     => 'required',
-        'title'       => 'nullable|string|max:255',
-        'description' => 'required',
-        'image'       => 'nullable|image|max:4096',
-    ]);
+    {
+        $request->validate([
+            'country'     => 'required',
+            'title'       => 'nullable|string|max:255',
+            'description' => 'required',
+            'image'       => 'nullable|image|max:4096',
+        ]);
 
-    $dest              = Destination::findOrFail($id);
-    $dest->name        = $request->title ?? $request->country; // fix for production DB
-    $dest->country     = $request->country;
-    $dest->title       = $request->title;
-    $dest->description = $request->description;
+        $dest              = Destination::findOrFail($id);
+        $dest->country     = $request->country;
+        $dest->title       = $request->title;
+        $dest->description = $request->description;
 
-    if ($request->hasFile('image')) {
-        if ($dest->image) Storage::disk('public')->delete($dest->image);
-        $dest->image = $request->file('image')->store('destinations', 'public');
+        if ($request->hasFile('image')) {
+            if ($dest->image) Storage::disk('public')->delete($dest->image);
+            $dest->image = $request->file('image')->store('destinations', 'public');
+        }
+
+        $dest->save();
+        return back()->with('success', 'Destination updated successfully!');
     }
-
-    $dest->save();
-    return back()->with('success', 'Destination updated successfully!');
-}
 
     public function checkBeforeArchive(Destination $destination)
     {
