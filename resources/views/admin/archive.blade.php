@@ -321,7 +321,6 @@
             <div class="arch-table-inner">
 
                 <div class="arch-tbl-head">
-                    <div class="arch-tbl-head-cell" style="flex:2.2; min-width:180px; text-align:left;">Destination</div>
                     <div class="arch-tbl-head-cell" style="flex:1.8; min-width:130px;">Country</div>
                     <div class="arch-tbl-head-cell" style="flex:1.2; min-width:100px;">Packages</div>
                     <div class="arch-tbl-head-cell" style="flex:1.5; min-width:130px;">Archived</div>
@@ -333,14 +332,6 @@
                 @endphp
                 <div class="arch-swipe-container">
                     <div class="arch-swipe-content">
-
-                        <div class="arch-row-cell name-cell" style="flex:2.2; min-width:180px;">
-                            <div style="overflow:hidden;">
-                                <div style="font-size:0.875rem; font-weight:400; color:#111827; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:160px;">
-                                    {{ $dest->name }}
-                                </div>
-                            </div>
-                        </div>
 
                         <div class="arch-row-cell" style="flex:1.8; min-width:130px;">
                             <span style="font-size:0.84rem; font-weight:400; color:#111827;">{{ $dest->country }}</span>

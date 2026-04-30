@@ -322,7 +322,6 @@
                                                     : 'bg-danger');
                                 $payLabel  = ucfirst($payStatus);
 
-                                // FIXED: decode transport JSON array before checking
                                 $transportRaw  = is_string($pkg->transport) ? json_decode($pkg->transport, true) : ($pkg->transport ?? []);
                                 $transport     = strtolower(is_array($transportRaw) ? implode(' ', $transportRaw) : ($transportRaw ?? ''));
                                 $transportDisplay = is_array($transportRaw)
@@ -345,6 +344,15 @@
                                 } elseif (str_contains($transport, 'walk') || str_contains($transport, 'hiking')) {
                                     $transportIcon = 'fa-person-hiking';
                                 }
+
+                                $pkgCategory = $pkg->category ?? null;
+                                $categoryIcons = [
+                                    'Beach'      => 'fa-umbrella-beach',
+                                    'Mountain'   => 'fa-mountain',
+                                    'City'       => 'fa-city',
+                                    'Historical' => 'fa-landmark',
+                                ];
+                                $pkgCategoryIcon = $categoryIcons[$pkgCategory] ?? 'fa-tag';
                             @endphp
                             <tr>
                                 <td class="fw-bold text-center" style="white-space:nowrap; width:70px;">#{{ $booking->id }}</td>
@@ -498,10 +506,16 @@
                                                         @endif
                                                         <div class="p-3">
                                                             <p class="fw-bold mb-1 pkg-name-label" style="font-size:0.95rem;">{{ $pkg->name }}</p>
+                                                            @if($pkgCategory)
+                                                            <p class="mb-1" style="font-size:0.78rem;">
+                                                                <i class="fa-solid {{ $pkgCategoryIcon }} me-1" style="color:#b89a5a;"></i>
+                                                                <span style="color:var(--text-muted);">{{ $pkgCategory }}</span>
+                                                            </p>
+                                                            @endif
                                                             @if($pkg->destination ?? $pkg->location ?? null)
                                                             <p class="mb-1 text-muted" style="font-size:0.78rem;">
                                                                 <i class="fa-solid fa-location-dot me-1" style="color:#e67e22;"></i>
-                                                                {{ is_object($pkg->destination) ? ($pkg->destination->name ?? $pkg->destination) : ($pkg->destination ?? $pkg->location) }}
+                                                                {{ is_object($pkg->destination) ? ($pkg->destination->country ?? $pkg->destination) : ($pkg->destination ?? $pkg->location) }}
                                                             </p>
                                                             @endif
                                                             @if($rating !== null)
@@ -538,6 +552,9 @@
                                                                 ['icon'=>'fa-users',        'color'=>'#e67e22', 'value'=>(string)$pax,                                                            'label'=>'Travelers'],
                                                                 ['icon'=>$transportIcon,    'color'=>'#a855f7', 'value'=>$transportDisplay,                                                       'label'=>'Transport'],
                                                             ];
+                                                            if ($pkgCategory) {
+                                                                $tiles[] = ['icon'=>$pkgCategoryIcon, 'color'=>'#b89a5a', 'value'=>$pkgCategory, 'label'=>'Category'];
+                                                            }
                                                         @endphp
                                                         @foreach($tiles as $tile)
                                                         <div class="col-6 col-md-3">

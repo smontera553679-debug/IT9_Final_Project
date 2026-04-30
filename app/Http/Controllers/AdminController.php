@@ -117,10 +117,8 @@ class AdminController extends Controller
     public function storeDestination(Request $request)
     {
         $data = $request->validate([
-            'name'        => 'required|string|max:255',
             'country'     => 'required|string|max:255',
             'title'       => 'nullable|string|max:255',
-            'category'    => 'required',
             'status'      => 'required|in:active,inactive',
             'description' => 'required',
             'image'       => 'nullable|image|max:4096',
@@ -143,19 +141,15 @@ class AdminController extends Controller
     public function updateDestination(Request $request, $id)
     {
         $request->validate([
-            'name'        => 'required',
             'country'     => 'required',
             'title'       => 'nullable|string|max:255',
-            'category'    => 'required',
             'description' => 'required',
             'image'       => 'nullable|image|max:4096',
         ]);
 
         $dest              = Destination::findOrFail($id);
-        $dest->name        = $request->name;
         $dest->country     = $request->country;
         $dest->title       = $request->title;
-        $dest->category    = $request->category;
         $dest->description = $request->description;
 
         if ($request->hasFile('image')) {
@@ -221,6 +215,7 @@ class AdminController extends Controller
         $data = $request->validate([
             'name'             => 'required|string|max:255',
             'destination_id'   => 'required|exists:destinations,id',
+            'category'         => 'required|string|max:255',
             'price_per_person' => 'required|numeric',
             'status'           => 'required',
             'description'      => 'required',
@@ -261,6 +256,7 @@ class AdminController extends Controller
         $data = $request->validate([
             'name'             => 'required',
             'destination_id'   => 'required',
+            'category'         => 'required|string|max:255',
             'price_per_person' => 'required|numeric',
             'status'           => 'required',
             'description'      => 'required',

@@ -135,39 +135,33 @@
         'bike'   => 'fa-motorcycle',
     ];
 
-    /*
-     * Defensive helper — handles:
-     *   • already-cast array
-     *   • normal JSON string  → ["a","b"]
-     *   • double-encoded JSON → "[\"a\",\"b\"]"
-     *   • comma-separated     → "a, b, c"
-     *   • null / empty
-     */
+    $categoryIcons = [
+        'Beach'      => 'fa-umbrella-beach',
+        'Mountain'   => 'fa-mountain',
+        'City'       => 'fa-city',
+        'Historical' => 'fa-landmark',
+    ];
+
     $toArray = function ($value) use (&$toArray): array {
         if (is_array($value))  return $value;
         if (empty($value))     return [];
         if (is_string($value)) {
             $decoded = json_decode($value, true);
             if (json_last_error() === JSON_ERROR_NONE) {
-                // Decoded successfully
                 if (is_array($decoded))  return $decoded;
-                // Decoded to another string = double-encoded, recurse once more
                 if (is_string($decoded)) return $toArray($decoded);
             }
-            // Fallback: plain comma-separated text
             return array_values(array_filter(array_map('trim', explode(',', $value))));
         }
         return [];
     };
 
-    // getRawOriginal() bypasses the model cast so we always get the raw DB string
     $packageTransports = $toArray($package->getRawOriginal('transport'));
     $itinerary         = $toArray($package->getRawOriginal('itinerary'));
     $inclusions        = $toArray($package->getRawOriginal('inclusions'));
     $exclusions        = $toArray($package->getRawOriginal('exclusions'));
     $packageImages     = $toArray($package->getRawOriginal('images'));
 
-    // Fallback to legacy single image column
     if (empty($packageImages) && $package->image) {
         $packageImages = [$package->image];
     }
@@ -187,6 +181,9 @@
         fn($t) => ($transportEmojis[$t] ?? '🚐') . ' ' . ucfirst($t),
         $uniqueTransports
     );
+
+    $category     = $package->category ?? null;
+    $categoryIcon = $categoryIcons[$category] ?? 'fa-tag';
 @endphp
 
 <div class="package-detail-wrap">
@@ -217,7 +214,7 @@
         <div class="pkg-hero-overlay"></div>
         <div class="pkg-hero-content">
             <div class="pkg-hero-left">
-                <div class="pkg-eyebrow">{{ $package->destination->name ?? 'Tour Package' }}</div>
+                <div class="pkg-eyebrow">{{ $package->destination->country ?? 'Tour Package' }}</div>
                 <h1 class="pkg-hero-title">{{ $package->name }}</h1>
                 <div class="pkg-hero-pills">
                     <span class="pkg-pill">
@@ -236,6 +233,12 @@
                         <i class="fa-solid fa-globe"></i>
                         {{ $package->language }}
                     </span>
+                    @if($category)
+                    <span class="pkg-pill">
+                        <i class="fa-solid {{ $categoryIcon }}"></i>
+                        {{ $category }}
+                    </span>
+                    @endif
                 </div>
                 <div class="star-row">
                     @for($i = 1; $i <= 5; $i++)
@@ -288,6 +291,15 @@
                     {{ implode(', ', $transportDisplay) ?: ucfirst($firstTransport) }}
                 </span>
             </div>
+            @if($category)
+            <div class="pkg-info-cell">
+                <span class="cell-label">Category</span>
+                <span class="cell-value">
+                    <i class="fa-solid {{ $categoryIcon }}" style="font-size:0.9rem;color:#b89a5a;margin-right:4px;"></i>
+                    {{ $category }}
+                </span>
+            </div>
+            @endif
         </div>
 
         <div class="section-label">What's Included</div>

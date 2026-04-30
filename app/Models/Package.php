@@ -15,6 +15,7 @@ class Package extends Model
         'price_per_person',
         'duration_days',
         'status',
+        'category', 
         'description',
         'inclusions',
         'exclusions',

@@ -115,6 +115,7 @@
                              class="card-img-top dest-img" alt="{{ $dest->name }}">
                         <div class="card-body p-2 p-md-3 text-center">
                             <h5 class="fw-bold mb-0" style="font-size:clamp(0.85rem,2vw,1rem);">{{ $dest->name }}</h5>
+                            <small class="d-block mt-1">{{ $dest->country }}</small>
                         </div>
                     </div>
                 </div>
@@ -132,6 +133,7 @@
                              class="card-img-top" style="height:155px;object-fit:cover;" alt="{{ $dest->name }}">
                         <div class="card-body p-2 text-center">
                             <h5 class="fw-bold mb-0" style="font-size:0.9rem;">{{ $dest->name }}</h5>
+                            <small class="d-block mt-1">{{ $dest->country }}</small>
                         </div>
                     </div>
                 </div>

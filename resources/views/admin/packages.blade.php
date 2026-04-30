@@ -283,7 +283,7 @@
 
                                 {{-- DESTINATION --}}
                                 <div class="pkg-col" style="flex:2; min-width:120px;">
-                                    {{ $package->destination->name ?? 'N/A' }}
+                                    {{ $package->destination->country ?? 'N/A' }}
                                 </div>
 
                                 {{-- PRICE --}}
@@ -357,9 +357,10 @@
                         <div class="col-6 col-md-3"><label class="small fw-bold">Language</label><input type="text" name="language" class="form-control" value="English"></div>
                         <div class="col-6 col-md-2"><label class="small fw-bold">Rating (1-5)</label><input type="number" name="rating" class="form-control" min="1" max="5" value="5"></div>
                         <div class="col-6 col-md-2"><label class="small fw-bold">Status</label><select name="status" class="form-select"><option value="active">Active</option><option value="inactive">Inactive</option></select></div>
-                        <div class="col-6 col-md-3"><label class="small fw-bold">Destination</label><select name="destination_id" class="form-select" required>@foreach($destinations as $d)<option value="{{ $d->id }}">{{ $d->name }}</option>@endforeach</select></div>
+                        <div class="col-6 col-md-3"><label class="small fw-bold">Destination</label><select name="destination_id" class="form-select" required>@foreach($destinations as $d)<option value="{{ $d->id }}">{{ $d->country }}</option>@endforeach</select></div>
+                        <div class="col-6 col-md-3"><label class="small fw-bold">Category</label><select name="category" class="form-select" required><option value="Beach">Beach</option><option value="Mountain">Mountain</option><option value="City">City</option><option value="Historical">Historical</option></select></div>
                         <div class="col-6 col-md-3"><label class="small fw-bold">Price per Person</label><input type="number" name="price_per_person" class="form-control" required></div>
-                        <div class="col-6 col-md-2"><label class="small fw-bold">Currency</label><input type="text" name="currency" class="form-control" value="PHP"></div>
+                        <div class="col-6 col-md-1"><label class="small fw-bold">Currency</label><input type="text" name="currency" class="form-control" value="PHP"></div>
                         <div class="col-6 col-md-2"><label class="small fw-bold">Max Group</label><input type="number" name="max_group_size" class="form-control" value="10"></div>
                         <div class="col-12"><label class="small fw-bold">Description</label><textarea name="description" class="form-control" rows="2" required></textarea></div>
 
@@ -440,7 +441,8 @@
                         <div class="col-6 col-md-2"><label class="small fw-bold">Rating</label><input type="number" id="edit_rating" name="rating" class="form-control" min="1" max="5"></div>
                         <div class="col-6 col-md-2"><label class="small fw-bold">Status</label><select id="edit_status" name="status" class="form-select"><option value="active">Active</option><option value="inactive">Inactive</option></select></div>
                         <div class="col-6 col-md-2"><label class="small fw-bold">Max Group</label><input type="number" id="edit_max_group_size" name="max_group_size" class="form-control"></div>
-                        <div class="col-6 col-md-3"><label class="small fw-bold">Destination</label><select id="edit_destination_id" name="destination_id" class="form-select" required>@foreach($destinations as $d)<option value="{{ $d->id }}">{{ $d->name }}</option>@endforeach</select></div>
+                        <div class="col-6 col-md-3"><label class="small fw-bold">Destination</label><select id="edit_destination_id" name="destination_id" class="form-select" required>@foreach($destinations as $d)<option value="{{ $d->id }}">{{ $d->country }}</option>@endforeach</select></div>
+                        <div class="col-6 col-md-3"><label class="small fw-bold">Category</label><select id="edit_category" name="category" class="form-select" required><option value="Beach">Beach</option><option value="Mountain">Mountain</option><option value="City">City</option><option value="Historical">Historical</option></select></div>
                         <div class="col-6 col-md-3"><label class="small fw-bold">Price/Person</label><input type="number" id="edit_price_per_person" name="price_per_person" class="form-control" required></div>
                         <div class="col-6 col-md-3"><label class="small fw-bold">Currency</label><input type="text" id="edit_currency" name="currency" class="form-control"></div>
                         <div class="col-12"><label class="small fw-bold">Description</label><textarea id="edit_description" name="description" class="form-control" rows="2" required></textarea></div>
@@ -656,6 +658,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     document.getElementById('edit_status').value           = data.status;
                     document.getElementById('edit_description').value      = data.description;
                     document.getElementById('edit_destination_id').value   = data.destination_id;
+                    document.getElementById('edit_category').value         = data.category || 'Beach';
                     document.getElementById('edit_price_per_person').value = data.price_per_person;
                     document.getElementById('edit_currency').value         = data.currency || 'PHP';
 

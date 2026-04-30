@@ -202,30 +202,25 @@
     /* ── MOBILE: full-width horizontal scroll + swipe-to-reveal actions ── */
     @media (max-width: 768px) {
 
-        /* table-outer scrolls the whole table horizontally */
         .dest-wrap .table-outer {
             overflow-x: auto !important;
             -webkit-overflow-scrolling: touch !important;
         }
 
-        /* Inner div must be wide enough for all columns */
         .dest-wrap .table-outer > div {
-            min-width: 580px;
+            min-width: 440px;
         }
 
-        /* tbl-head must match the same min-width so it aligns with rows */
         .dest-wrap .tbl-head {
-            min-width: 580px;
+            min-width: 440px;
         }
 
-        /* Each swipe-container row fills the full min-width */
         .dest-wrap .swipe-container {
-            min-width: 580px;
+            min-width: 440px;
         }
 
-        /* swipe-content takes exactly the column area */
         .dest-wrap .swipe-content {
-            min-width: 580px !important;
+            min-width: 440px !important;
         }
 
         /* Show scroll strip on mobile */
@@ -263,12 +258,10 @@
                 <div class="table-outer" id="tableOuter">
                     <div style="width:100%;">
 
-                        {{-- FLEX HEADER (desktop only) --}}
+                        {{-- FLEX HEADER --}}
                         <div class="tbl-head d-flex align-items-center py-3">
                             <div style="flex:1; min-width:80px;" class="text-center tbl-head-cell">Popular</div>
-                            <div style="flex:2; min-width:120px;" class="text-center tbl-head-cell">Destination</div>
                             <div style="flex:2; min-width:140px;" class="text-center tbl-head-cell">Country</div>
-                            <div style="flex:1.5; min-width:100px;" class="text-center tbl-head-cell">Category</div>
                             <div style="flex:1.5; min-width:100px;" class="text-center tbl-head-cell">Status</div>
                         </div>
 
@@ -288,19 +281,9 @@
                                     </form>
                                 </div>
 
-                                {{-- Destination --}}
-                                <div style="flex:2; min-width:120px;" class="text-center cell-text">
-                                    {{ $dest->name }}
-                                </div>
-
                                 {{-- Country --}}
                                 <div style="flex:2; min-width:140px;" class="text-center cell-text">
                                     {{ $dest->country }}
-                                </div>
-
-                                {{-- Category --}}
-                                <div style="flex:1.5; min-width:100px;" class="text-center cell-text">
-                                    {{ $dest->category }}
                                 </div>
 
                                 {{-- Status --}}
@@ -322,7 +305,6 @@
                                     data-name="{{ $dest->name }}"
                                     data-title="{{ $dest->title }}"
                                     data-country="{{ $dest->country }}"
-                                    data-category="{{ $dest->category }}"
                                     data-description="{{ $dest->description }}">
                                     <i class="fas fa-edit" style="font-size:0.8rem;"></i>
                                 </button>
@@ -364,25 +346,12 @@
                 </div>
                 <div class="modal-body px-4 pb-4">
                     <div class="mb-3">
-                        <label class="form-label small fw-bold text-uppercase">Name</label>
-                        <input type="text" name="name" class="form-control border-0" placeholder="e.g. Paris" required>
-                    </div>
-                    <div class="mb-3">
                         <label class="form-label small fw-bold text-uppercase">Country</label>
                         <input type="text" name="country" class="form-control border-0" placeholder="e.g. France" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label small fw-bold text-uppercase">Title</label>
                         <input type="text" name="title" class="form-control border-0" placeholder="e.g. The City of Love">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-uppercase">Category</label>
-                        <select name="category" class="form-select border-0" required>
-                            <option value="Beach">Beach</option>
-                            <option value="Mountain">Mountain</option>
-                            <option value="City">City</option>
-                            <option value="Historical">Historical</option>
-                        </select>
                     </div>
                     <div class="mb-3">
                         <label class="form-label small fw-bold text-uppercase">Description</label>
@@ -416,25 +385,12 @@
                 </div>
                 <div class="modal-body px-4 pb-4">
                     <div class="mb-3">
-                        <label class="form-label small fw-bold text-uppercase">Name</label>
-                        <input type="text" name="name" id="edit_name" class="form-control border-0" required>
-                    </div>
-                    <div class="mb-3">
                         <label class="form-label small fw-bold text-uppercase">Country</label>
                         <input type="text" name="country" id="edit_country" class="form-control border-0" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label small fw-bold text-uppercase">Title</label>
                         <input type="text" name="title" id="edit_title" class="form-control border-0">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-uppercase">Category</label>
-                        <select name="category" id="edit_category" class="form-select border-0" required>
-                            <option value="Beach">Beach</option>
-                            <option value="Mountain">Mountain</option>
-                            <option value="City">City</option>
-                            <option value="Historical">Historical</option>
-                        </select>
                     </div>
                     <div class="mb-3">
                         <label class="form-label small fw-bold text-uppercase">Description</label>
@@ -495,10 +451,8 @@ document.addEventListener('DOMContentLoaded', function () {
     /* ── Edit modal ── */
     document.querySelectorAll('.btn-edit').forEach(button => {
         button.addEventListener('click', function () {
-            document.getElementById('edit_name').value        = this.dataset.name;
             document.getElementById('edit_title').value       = this.dataset.title || '';
             document.getElementById('edit_country').value     = this.dataset.country;
-            document.getElementById('edit_category').value    = this.dataset.category;
             document.getElementById('edit_description').value = this.dataset.description;
             document.getElementById('editForm').action        = this.dataset.url;
             new bootstrap.Modal(document.getElementById('editDestModal')).show();

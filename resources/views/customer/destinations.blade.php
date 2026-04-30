@@ -61,11 +61,11 @@
         <div class="destination-card {{ !$isActive ? 'unavailable' : '' }}">
             <div class="card-img-wrapper">
                 <img src="{{ $dest->image ? asset('storage/' . $dest->image) : 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34' }}"
-                     class="card-img-left" alt="{{ $dest->name }}">
+                     class="card-img-left" alt="{{ $dest->country }}">
             </div>
             <div class="card-content">
                 <div class="dest-info-top">
-                    <h2>{{ $dest->name }}</h2>
+                    <h2>{{ $dest->country }}</h2>
                     @if($dest->title)
                         <div class="dest-motto">"{{ $dest->title }}"</div>
                     @endif
