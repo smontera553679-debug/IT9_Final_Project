@@ -90,7 +90,7 @@ class AdminController extends Controller
 
         /* ── Popular Destinations ── */
         $destinations = Destination::withCount('bookings')->get();
-        $destNames    = $destinations->pluck('name')->toArray();
+        $destNames = $destinations->pluck('country')->toArray();
         $destCounts   = $destinations->pluck('bookings_count')->toArray();
 
         if (empty($destNames)) { $destNames = ['No Data']; $destCounts = [0]; }
