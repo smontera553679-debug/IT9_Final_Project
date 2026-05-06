@@ -266,7 +266,7 @@
                                 <th class="py-3 text-center">Package</th>
                                 <th class="py-3 text-center" style="width:150px;">Travel Date</th>
                                 <th class="py-3 text-center" style="width:130px;">Status</th>
-                                <th class="py-3 text-center" style="width:180px;">Actions</th>
+                                <th class="py-3 text-center" style="width:160px;">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -314,7 +314,11 @@
                                 $rating      = $pkg->rating ?? $pkg->average_rating ?? null;
                                 $ratingCount = $pkg->reviews_count ?? $pkg->ratings_count ?? null;
 
-                                $payStatus = $booking->payment_status ?? ($amountPaid >= $total ? 'Paid' : ($amountPaid > 0 ? 'Partial' : 'Unpaid'));
+                                // ── Payment status: confirmed bookings are always Paid ──
+                                $payStatus = $booking->status === 'confirmed'
+                                    ? 'Paid'
+                                    : ($booking->payment_status ?? ($amountPaid >= $total ? 'Paid' : ($amountPaid > 0 ? 'Partial' : 'Unpaid')));
+
                                 $payBadge  = $payStatus === 'Paid' || $payStatus === 'confirmed'
                                                 ? 'bg-success'
                                                 : ($payStatus === 'Partial' || $payStatus === 'partial'
@@ -355,8 +359,8 @@
                                 $pkgCategoryIcon = $categoryIcons[$pkgCategory] ?? 'fa-tag';
                             @endphp
                             <tr>
-                                <td class="fw-bold text-center" style="white-space:nowrap; width:70px;">#{{ $booking->id }}</td>
-                                <td class="text-center" style="min-width:120px;">
+                                <td class="fw-bold text-center" style="width:70px;">#{{ $booking->id }}</td>
+                                <td class="text-center">
                                     <span style="font-size:clamp(0.8rem,2vw,0.95rem);">{{ $pkg->name }}</span>
                                     <div class="d-md-none text-muted mt-1" style="font-size:0.75rem;">
                                         {{ $travelStart->format('M d, Y') }}
@@ -370,28 +374,28 @@
                                         {{ $label }}
                                     </span>
                                 </td>
-                                <td class="text-center" style="white-space:nowrap; width:180px;">
-                                    <button type="button"
-                                            class="btn btn-outline-primary btn-sm rounded-pill px-2 px-md-3 me-1"
-                                            style="font-size:0.78rem;"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#viewModal{{ $booking->id }}">
-                                        <i class="fa-solid fa-eye me-1" style="font-size:0.7rem;"></i>View
-                                    </button>
-
-                                    @if($booking->status == 'pending')
+                                <td class="text-center" style="width:160px;">
+                                    <div class="d-flex align-items-center justify-content-center gap-2">
                                         <button type="button"
-                                                class="btn btn-outline-danger btn-sm rounded-pill px-2 px-md-3"
+                                                class="btn btn-outline-primary btn-sm rounded-pill px-3"
                                                 style="font-size:0.78rem;"
                                                 data-bs-toggle="modal"
-                                                data-bs-target="#cancelModal{{ $booking->id }}">
-                                            Cancel
+                                                data-bs-target="#viewModal{{ $booking->id }}">
+                                            <i class="fa-solid fa-eye me-1" style="font-size:0.7rem;"></i>View
                                         </button>
-                                    @elseif($booking->status == 'confirmed')
-                                        <span class="text-success small fw-bold">Secured ✓</span>
-                                    @else
-                                        <span class="text-muted small">—</span>
-                                    @endif
+
+                                        @if($booking->status == 'pending')
+                                            <button type="button"
+                                                    class="btn btn-outline-danger btn-sm rounded-pill px-3"
+                                                    style="font-size:0.78rem;"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#cancelModal{{ $booking->id }}">
+                                                Cancel
+                                            </button>
+                                        @else
+                                            {{-- placeholder to keep View button centered when no second action --}}
+                                        @endif
+                                    </div>
                                 </td>
                             </tr>
 
