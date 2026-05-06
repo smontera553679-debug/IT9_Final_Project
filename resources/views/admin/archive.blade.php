@@ -422,16 +422,14 @@
                             </div>
                         </div>
 
-                        <div class="arch-row-cell" style="flex:1.8; min-width:120px; flex-direction:column; gap:3px;">
-                            @if($package->destination)
+                        <div class="arch-row-cell" style="flex:1.8; min-width:120px;">
+                            @php
+                                $destination = \App\Models\Destination::withTrashed()->find($package->destination_id);
+                            @endphp
+                            @if($destination)
                                 <span style="font-size:0.78rem; font-weight:400; color:#111827; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:110px; display:block; text-align:center;">
-                                    {{ $package->destination->name }}
+                                    {{ $destination->country }}
                                 </span>
-                                @if($package->destination->trashed())
-                                    <span class="arch-badge dest-archived" style="font-size:0.6rem;">
-                                        <i class="fas fa-archive" style="font-size:0.55rem;"></i> archived
-                                    </span>
-                                @endif
                             @else
                                 <span style="font-size:0.78rem; font-weight:400; color:#111827;">N/A</span>
                             @endif
@@ -458,7 +456,7 @@
                             <button type="submit"
                                 class="arch-action-btn restore"
                                 title="Restore Package"
-                                @if($package->destination && $package->destination->trashed())
+                                @if($destination && $destination->trashed())
                                     onclick="event.preventDefault(); alert('Cannot restore — its destination is still archived. Restore the destination first.');"
                                 @endif>
                                 <i class="fa fa-rotate-left"></i>

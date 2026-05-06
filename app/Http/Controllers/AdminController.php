@@ -90,7 +90,7 @@ class AdminController extends Controller
 
         /* ── Popular Destinations ── */
         $destinations = Destination::withCount('bookings')->get();
-        $destNames = $destinations->pluck('country')->toArray();
+        $destNames    = $destinations->pluck('country')->toArray();
         $destCounts   = $destinations->pluck('bookings_count')->toArray();
 
         if (empty($destNames)) { $destNames = ['No Data']; $destCounts = [0]; }
@@ -116,7 +116,6 @@ class AdminController extends Controller
 
     public function storeDestination(Request $request)
     {
-        // REMOVED 'name' FROM VALIDATION
         $data = $request->validate([
             'country'     => 'required|string|max:255',
             'title'       => 'nullable|string|max:255',
@@ -170,7 +169,7 @@ class AdminController extends Controller
 
         return response()->json([
             'has_active_packages' => $activePackages > 0,
-            'active_count'         => $activePackages,
+            'active_count'        => $activePackages,
         ]);
     }
 
@@ -178,14 +177,16 @@ class AdminController extends Controller
     {
         $destination = Destination::findOrFail($id);
 
-        $destination->packages()->each(function ($package) {
-            $package->update(['status' => 'inactive']);
-            $package->delete(); 
-        });
+        // Set all active packages to inactive — do NOT archive/soft-delete them.
+        // They stay visible in the packages table but locked until destination is restored.
+        Package::where('destination_id', $destination->id)
+               ->where('status', 'active')
+               ->update(['status' => 'inactive']);
 
-        $destination->delete(); 
+        // Soft-delete only the destination
+        $destination->delete();
 
-        return back()->with('success', 'Destination archived. All related packages have been archived and made inactive.');
+        return back()->with('success', 'Destination archived. Its packages have been set to inactive and locked until the destination is restored.');
     }
 
     /* =========================================================================
@@ -194,6 +195,7 @@ class AdminController extends Controller
 
     public function packages()
     {
+        // Include packages whose destination is soft-deleted (archived)
         $packages     = Package::with(['destination' => fn($q) => $q->withTrashed()])->get();
         $destinations = Destination::where('status', 'active')->get();
 
@@ -281,7 +283,7 @@ class AdminController extends Controller
         $package = Package::findOrFail($id);
 
         $package->update(['status' => 'inactive']);
-        $package->delete(); 
+        $package->delete();
 
         return back()->with('success', "Package \"{$package->name}\" has been archived. Existing bookings are unaffected.");
     }
@@ -302,10 +304,10 @@ class AdminController extends Controller
     {
         $package = Package::findOrFail($id);
 
+        // Block reactivation if the destination is archived
         if ($package->status === 'inactive') {
             $destination = Destination::withTrashed()->find($package->destination_id);
             if ($destination && $destination->trashed()) {
-                // CHANGED $destination->name TO $destination->country
                 return back()->with('error', "Cannot activate \"{$package->name}\" because its destination \"{$destination->country}\" is archived. Restore the destination first.");
             }
         }
@@ -350,7 +352,6 @@ class AdminController extends Controller
                     $customer->id,
                     'destination',
                     '⭐ New Popular Destination!',
-                    // CHANGED $destination->name TO $destination->country
                     "{$destination->country} has been highlighted as a popular destination. Check it out!",
                     route('customer.landing') . '#destinations'
                 );
@@ -389,8 +390,8 @@ class AdminController extends Controller
                 $customerId  = $payment->booking->user_id;
                 $bookingLink = route('customer.bookings');
 
-                $this->notify($customerId, 'payment_verified',  'Payment Verified ✅',  'Your payment has been confirmed.',               $bookingLink);
-                $this->notify($customerId, 'booking_approved',  'Booking Approved 🎉',  'Your booking has been confirmed by the admin.',  $bookingLink);
+                $this->notify($customerId, 'payment_verified', 'Payment Verified ✅', 'Your payment has been confirmed.',              $bookingLink);
+                $this->notify($customerId, 'booking_approved', 'Booking Approved 🎉', 'Your booking has been confirmed by the admin.', $bookingLink);
             }
         });
 

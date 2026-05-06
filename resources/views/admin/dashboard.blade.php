@@ -15,62 +15,62 @@ function formatStatNumber($num) {
 
     {{-- ── Stat Cards ── --}}
     <div class="row mb-4 g-3">
-        <div class="col-12 col-md-3">
-            <div class="stat-card card-purple d-flex align-items-center justify-content-between p-3 p-md-4">
-                <div class="d-flex align-items-center">
-                    <div class="icon-box me-3">
-                        <i class="fas fa-calendar-check text-dark fs-2"></i>
+        <div class="col-6 col-md-3">
+            <div class="stat-card card-purple d-flex align-items-center justify-content-between p-3">
+                <div class="d-flex align-items-center gap-2 overflow-hidden">
+                    <div class="icon-box flex-shrink-0">
+                        <i class="fas fa-calendar-check text-dark"></i>
                     </div>
-                    <div class="text-white">
+                    <div class="text-white overflow-hidden">
                         <div class="fw-bold text-uppercase stat-label">Total Bookings</div>
                     </div>
                 </div>
-                <div class="stat-number fw-bold text-white">{{ number_format($totalBookings) }}</div>
+                <div class="stat-number fw-bold text-white ms-2">{{ number_format($totalBookings) }}</div>
             </div>
         </div>
 
-        <div class="col-12 col-md-3">
-            <div class="stat-card card-green d-flex align-items-center justify-content-between p-3 p-md-4">
-                <div class="d-flex align-items-center">
-                    <div class="icon-box me-3">
-                        <i class="fas fa-coins text-warning fs-2"></i>
+        <div class="col-6 col-md-3">
+            <div class="stat-card card-green d-flex align-items-center justify-content-between p-3">
+                <div class="d-flex align-items-center gap-2 overflow-hidden">
+                    <div class="icon-box flex-shrink-0">
+                        <i class="fas fa-coins text-warning"></i>
                     </div>
-                    <div class="text-white">
+                    <div class="text-white overflow-hidden">
                         <div class="fw-bold text-uppercase stat-label">Revenue</div>
                     </div>
                 </div>
-                <div class="stat-number fw-bold text-white">₱{{ formatStatNumber($revenue) }}</div>
+                <div class="stat-number fw-bold text-white ms-2">₱{{ formatStatNumber($revenue) }}</div>
             </div>
         </div>
 
-        <div class="col-12 col-md-3">
-            <div class="stat-card card-blue d-flex align-items-center justify-content-between p-3 p-md-4">
-                <div class="d-flex align-items-center">
-                    <div class="icon-box me-3">
-                        <i class="fas fa-bell text-warning fs-2"></i>
+        <div class="col-6 col-md-3">
+            <div class="stat-card card-blue d-flex align-items-center justify-content-between p-3">
+                <div class="d-flex align-items-center gap-2 overflow-hidden">
+                    <div class="icon-box flex-shrink-0">
+                        <i class="fas fa-bell text-warning"></i>
                     </div>
-                    <div class="text-white">
+                    <div class="text-white overflow-hidden">
                         <div class="fw-bold text-uppercase stat-label">Active Tours</div>
                     </div>
                 </div>
-                <div class="stat-number fw-bold text-white">{{ number_format($activeTours) }}</div>
+                <div class="stat-number fw-bold text-white ms-2">{{ number_format($activeTours) }}</div>
             </div>
         </div>
 
-        <div class="col-12 col-md-3">
-            <div class="stat-card card-gold d-flex align-items-center justify-content-between p-3 p-md-4">
-                <div class="d-flex align-items-center">
-                    <div class="icon-box me-3">
-                        <i class="fas fa-star text-warning fs-2"></i>
+        <div class="col-6 col-md-3">
+            <div class="stat-card card-gold d-flex align-items-center justify-content-between p-3">
+                <div class="d-flex align-items-center gap-2 overflow-hidden">
+                    <div class="icon-box flex-shrink-0">
+                        <i class="fas fa-star text-warning"></i>
                     </div>
-                    <div class="text-white">
+                    <div class="text-white overflow-hidden">
                         <div class="fw-bold text-uppercase stat-label">Overall Rating</div>
-                        <div style="font-size:0.7rem; opacity:0.85;">{{ $totalRatings }} review{{ $totalRatings != 1 ? 's' : '' }}</div>
+                        <div class="stat-sub">{{ $totalRatings }} review{{ $totalRatings != 1 ? 's' : '' }}</div>
                     </div>
                 </div>
-                <div class="stat-number fw-bold text-white">
+                <div class="stat-number fw-bold text-white ms-2">
                     {{ $overallRating > 0 ? number_format($overallRating, 1) : '—' }}
-                    @if($overallRating > 0)<span style="font-size:1rem; opacity:0.85;">/5</span>@endif
+                    @if($overallRating > 0)<span class="stat-slash">/5</span>@endif
                 </div>
             </div>
         </div>
@@ -370,29 +370,51 @@ function formatStatNumber($num) {
     /* ── Stat Cards ── */
     .stat-card {
         border-radius: 20px;
-        min-height: 120px;
+        min-height: 90px;
         border: none;
+        flex-wrap: nowrap;
+        overflow: hidden;
     }
     .card-purple { background-color: #8378d3; }
     .card-green  { background-color: #81c79c; }
     .card-blue   { background-color: #64a1e3; }
     .card-gold   { background-color: #f59e0b; }
 
-    .stat-label  { font-size: 0.8rem; }
+    .stat-label {
+        font-size: clamp(0.55rem, 1.8vw, 0.8rem);
+        line-height: 1.25;
+        white-space: normal;
+        word-break: break-word;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+    .stat-sub {
+        font-size: clamp(0.5rem, 1.5vw, 0.7rem);
+        opacity: 0.85;
+    }
     .stat-number {
-        font-size: clamp(1.4rem, 3.5vw, 2.8rem);
+        font-size: clamp(1rem, 3.5vw, 2.4rem);
         line-height: 1;
         white-space: nowrap;
+        flex-shrink: 0;
+    }
+    .stat-slash {
+        font-size: clamp(0.65rem, 1.5vw, 1rem);
+        opacity: 0.85;
     }
 
     .icon-box {
         background: rgba(255,255,255,0.9);
-        padding: 12px;
         border-radius: 12px;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         display: flex; align-items: center; justify-content: center;
-        width: 56px; height: 56px;
+        width: clamp(36px, 7vw, 52px);
+        height: clamp(36px, 7vw, 52px);
+        padding: clamp(7px, 1.5vw, 12px);
         flex-shrink: 0;
+    }
+    .icon-box i {
+        font-size: clamp(0.9rem, 2.5vw, 1.5rem) !important;
     }
 
     /* ── Chart Card ── */
@@ -496,9 +518,7 @@ function formatStatNumber($num) {
 
     /* ── Mobile tweaks ── */
     @media (max-width: 576px) {
-        .stat-card  { min-height: 100px; border-radius: 16px; }
-        .icon-box   { width: 46px; height: 46px; padding: 10px; }
-        .icon-box i { font-size: 1.25rem !important; }
+        .stat-card  { min-height: 80px; border-radius: 14px; padding: 10px 12px !important; }
         .chart-canvas-wrap { height: 220px; }
         .chart-card { padding: 16px 14px 14px; }
         .chart-title-text { font-size: 0.85rem; }

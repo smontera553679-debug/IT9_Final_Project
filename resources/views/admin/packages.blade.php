@@ -2,10 +2,6 @@
 
 @section('content')
 <style>
-    /* ══════════════════════════════════════
-       PACKAGES — THEME-AWARE STYLES
-    ══════════════════════════════════════ */
-
     .pkg-wrap .page-title { color: var(--text-title); transition: color 0.3s ease; }
 
     .pkg-wrap .card {
@@ -92,9 +88,39 @@
     @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
     .pkg-wrap .empty-state { color: var(--text-time); font-size: 0.88rem; transition: color 0.3s ease; }
 
-    /* ══════════════════════════════════════
-       CUSTOM TRANSPORT PICKER
-    ══════════════════════════════════════ */
+    /* Locked row — destination is archived */
+    .pkg-wrap .swipe-content.dest-archived-row {
+        opacity: 0.6;
+        background: repeating-linear-gradient(
+            135deg,
+            transparent,
+            transparent 6px,
+            rgba(0,0,0,0.025) 6px,
+            rgba(0,0,0,0.025) 12px
+        );
+    }
+    .dest-locked-badge {
+        display: inline-flex; align-items: center; gap: 4px;
+        font-size: 0.62rem; font-weight: 600;
+        padding: 2px 8px; border-radius: 100px;
+        background: rgba(99,102,241,0.1); color: #6366f1;
+        border: 1px solid rgba(99,102,241,0.2);
+        white-space: nowrap;
+    }
+    .status-locked-btn {
+        display: inline-flex; align-items: center; gap: 5px;
+        font-size: 0.75rem; font-weight: 700;
+        padding: 4px 12px; border-radius: 50px;
+        background: #888; color: #fff;
+        border: none; cursor: not-allowed;
+        opacity: 0.75; text-transform: uppercase;
+        letter-spacing: 0.03em; white-space: nowrap;
+    }
+    .pkg-wrap .action-btn.btn-disabled {
+        opacity: 0.35; cursor: not-allowed; pointer-events: none;
+    }
+
+    /* ══ TRANSPORT PICKER ══ */
     .transport-wrapper { position: relative; flex-shrink: 0; }
     .transport-wrapper select { position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0; }
     .transport-trigger {
@@ -107,7 +133,6 @@
         user-select: none; transition: background 0.15s ease;
     }
     .transport-trigger:hover { background: var(--notif-hover) !important; }
-
     .transport-dropdown {
         display: none; position: absolute; top: calc(100% + 4px); left: 0;
         z-index: 9999; background: var(--bg-dropdown, #fff);
@@ -115,7 +140,6 @@
         box-shadow: 0 8px 28px rgba(0,0,0,0.18); overflow: hidden; min-width: 170px;
     }
     .transport-dropdown.open { display: block; }
-
     .transport-option {
         display: flex; align-items: center; gap: 10px;
         padding: 9px 14px; cursor: pointer; font-size: 0.84rem;
@@ -126,9 +150,7 @@
     .transport-option .t-icon { font-size: 1.05rem; width: 22px; text-align: center; }
     .transport-option .t-label { color: var(--text-title); }
 
-    /* ══════════════════════════════════════
-       MODALS — THEME-AWARE
-    ══════════════════════════════════════ */
+    /* ══ MODALS ══ */
     .pkg-modal .modal-content {
         background: var(--bg-dropdown) !important;
         border: 1px solid var(--border-light) !important;
@@ -175,9 +197,7 @@
         color: #6f42c1 !important;
     }
 
-    /* ══════════════════════════════════════
-       MOBILE: horizontal scroll
-    ══════════════════════════════════════ */
+    /* ══ MOBILE ══ */
     @media (max-width: 768px) {
         .pkg-wrap .table-outer { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
         .pkg-wrap .table-outer > div { min-width: 640px; }
@@ -185,10 +205,6 @@
         .pkg-wrap .swipe-container { min-width: 640px; }
         .pkg-wrap .swipe-content   { min-width: 640px !important; }
     }
-
-    /* ══════════════════════════════════════
-       MODAL MOBILE RESPONSIVENESS
-    ══════════════════════════════════════ */
     @media (max-width: 576px) {
         .pkg-modal .modal-dialog {
             margin: 0 !important; max-width: 100% !important;
@@ -229,14 +245,12 @@
             <ul class="mb-0">@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
         </div>
     @endif
-
     @if(session('success'))
         <div class="alert alert-success border-0 shadow-sm alert-dismissible fade show">
             {{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     @endif
-
     @if(session('error'))
         <div class="alert alert-danger border-0 shadow-sm alert-dismissible fade show">
             {{ session('error') }}
@@ -250,30 +264,38 @@
                 <div class="table-outer" id="tableOuter">
                     <div style="width:100%;">
 
-                        {{-- FLEX HEADER --}}
+                        {{-- HEADER --}}
                         <div class="tbl-head d-flex align-items-center py-3">
-                            <div style="flex:1; min-width:70px;"  class="text-center tbl-head-cell">Favorite</div>
-                            <div style="flex:2; min-width:130px;" class="text-center tbl-head-cell">Package</div>
-                            <div style="flex:2; min-width:120px;" class="text-center tbl-head-cell">Destination</div>
+                            <div style="flex:1; min-width:70px;"   class="text-center tbl-head-cell">Favorite</div>
+                            <div style="flex:2; min-width:130px;"  class="text-center tbl-head-cell">Package</div>
+                            <div style="flex:2; min-width:120px;"  class="text-center tbl-head-cell">Destination</div>
                             <div style="flex:1.5; min-width:110px;" class="text-center tbl-head-cell">Price</div>
                             <div style="flex:1.5; min-width:100px;" class="text-center tbl-head-cell">Duration</div>
-                            <div style="flex:1.5; min-width:100px;" class="text-center tbl-head-cell">Status</div>
+                            <div style="flex:1.5; min-width:110px;" class="text-center tbl-head-cell">Status</div>
                         </div>
 
                         {{-- ROWS --}}
                         @forelse($packages as $package)
+                        @php
+                            $destArchived = $package->destination && $package->destination->trashed();
+                        @endphp
                         <div class="swipe-container">
-                            <div class="swipe-content">
+                            <div class="swipe-content {{ $destArchived ? 'dest-archived-row' : '' }}">
 
                                 {{-- FAVORITE --}}
                                 <div class="pkg-col" style="flex:1; min-width:70px;">
-                                    <form action="{{ route('packages.toggleFeatured', $package->id) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="btn p-0 border-0 shadow-none">
-                                            <i class="{{ $package->is_featured ? 'fas fa-star text-warning' : 'far fa-star' }}"
-                                               style="{{ $package->is_featured ? '' : 'color: var(--text-muted);' }} font-size:1.1rem;"></i>
-                                        </button>
-                                    </form>
+                                    @if($destArchived)
+                                        <i class="{{ $package->is_featured ? 'fas fa-star text-warning' : 'far fa-star' }}"
+                                           style="{{ $package->is_featured ? '' : 'color:var(--text-muted);' }} font-size:1.1rem; opacity:0.5;"></i>
+                                    @else
+                                        <form action="{{ route('packages.toggleFeatured', $package->id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn p-0 border-0 shadow-none">
+                                                <i class="{{ $package->is_featured ? 'fas fa-star text-warning' : 'far fa-star' }}"
+                                                   style="{{ $package->is_featured ? '' : 'color: var(--text-muted);' }} font-size:1.1rem;"></i>
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
 
                                 {{-- PACKAGE NAME --}}
@@ -282,8 +304,13 @@
                                 </div>
 
                                 {{-- DESTINATION --}}
-                                <div class="pkg-col" style="flex:2; min-width:120px;">
+                                <div class="pkg-col" style="flex:2; min-width:120px; flex-direction:column; gap:3px;">
                                     {{ $package->destination->country ?? 'N/A' }}
+                                    @if($destArchived)
+                                        <span class="dest-locked-badge">
+                                            <i class="fas fa-lock" style="font-size:0.55rem;"></i> dest. archived
+                                        </span>
+                                    @endif
                                 </div>
 
                                 {{-- PRICE --}}
@@ -297,31 +324,44 @@
                                 </div>
 
                                 {{-- STATUS --}}
-                                <div class="pkg-col" style="flex:1.5; min-width:100px;">
-                                    <form action="{{ route('packages.toggle', $package->id) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="btn fw-bold text-white border-0 py-1 px-3 shadow-sm"
-                                            style="background-color:{{ $package->status == 'active' ? '#00b300' : '#888' }}; border-radius:50px; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.03em; white-space:nowrap;">
-                                            {{ $package->status }}
-                                        </button>
-                                    </form>
+                                <div class="pkg-col" style="flex:1.5; min-width:110px;">
+                                    @if($destArchived)
+                                        {{-- Locked: destination is archived, cannot reactivate --}}
+                                        <span class="status-locked-btn" title="Restore the destination first to change this package's status.">
+                                            <i class="fas fa-lock" style="font-size:0.65rem;"></i>
+                                            INACTIVE
+                                        </span>
+                                    @else
+                                        <form action="{{ route('packages.toggle', $package->id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn fw-bold text-white border-0 py-1 px-3 shadow-sm"
+                                                style="background-color:{{ $package->status == 'active' ? '#00b300' : '#888' }}; border-radius:50px; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.03em; white-space:nowrap;">
+                                                {{ $package->status }}
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
 
                             </div>
 
                             {{-- SWIPE ACTIONS --}}
                             <div class="swipe-actions">
-                                {{-- Edit --}}
-                                <button type="button" class="action-btn bg-primary edit-package-btn"
-                                    data-id="{{ $package->id }}" title="Edit">
+                                {{-- Edit (disabled if dest archived) --}}
+                                <button type="button"
+                                    class="action-btn bg-primary edit-package-btn {{ $destArchived ? 'btn-disabled' : '' }}"
+                                    data-id="{{ $package->id }}"
+                                    title="{{ $destArchived ? 'Restore destination first' : 'Edit' }}"
+                                    {{ $destArchived ? 'disabled' : '' }}>
                                     <i class="fa fa-edit" style="font-size:0.8rem;"></i>
                                 </button>
 
-                                {{-- Archive --}}
-                                <button type="button" class="action-btn bg-warning btn-archive-trigger"
+                                {{-- Archive (disabled if dest archived) --}}
+                                <button type="button"
+                                    class="action-btn bg-warning {{ $destArchived ? 'btn-disabled' : 'btn-archive-trigger' }}"
                                     data-url="{{ route('packages.destroy', $package->id) }}"
                                     data-name="{{ $package->name }}"
-                                    title="Archive">
+                                    title="{{ $destArchived ? 'Restore destination first' : 'Archive' }}"
+                                    {{ $destArchived ? 'disabled' : '' }}>
                                     <i class="fas fa-box-archive" style="font-size:0.8rem;"></i>
                                 </button>
                             </div>
@@ -364,7 +404,6 @@
                         <div class="col-6 col-md-2"><label class="small fw-bold">Max Group</label><input type="number" name="max_group_size" class="form-control" value="10"></div>
                         <div class="col-12"><label class="small fw-bold">Description</label><textarea name="description" class="form-control" rows="2" required></textarea></div>
 
-                        {{-- ITINERARY --}}
                         <div class="col-12 col-md-4">
                             <label class="fw-bold small text-primary">ITINERARY</label>
                             <div class="itinerary_container">
@@ -381,7 +420,6 @@
                             <button type="button" class="btn btn-sm btn-outline-primary add-day-btn mt-1"><i class="fa fa-plus"></i> Add Day</button>
                         </div>
 
-                        {{-- INCLUSIONS --}}
                         <div class="col-12 col-md-4">
                             <label class="fw-bold small text-success">INCLUSIONS</label>
                             <div class="inclusions_container">
@@ -393,7 +431,6 @@
                             <button type="button" class="btn btn-sm btn-outline-success add-inclusion-btn mt-1"><i class="fa fa-plus"></i> Add</button>
                         </div>
 
-                        {{-- EXCLUSIONS --}}
                         <div class="col-12 col-md-4">
                             <label class="fw-bold small text-danger">EXCLUSIONS</label>
                             <div class="exclusions_container">
@@ -447,7 +484,6 @@
                         <div class="col-6 col-md-3"><label class="small fw-bold">Currency</label><input type="text" id="edit_currency" name="currency" class="form-control"></div>
                         <div class="col-12"><label class="small fw-bold">Description</label><textarea id="edit_description" name="description" class="form-control" rows="2" required></textarea></div>
 
-                        {{-- ITINERARY --}}
                         <div class="col-12 col-md-4">
                             <label class="fw-bold small text-primary">ITINERARY</label>
                             <p class="text-muted" style="font-size:0.72rem;margin-bottom:6px;">Tap the icon to pick a transport mode per day.</p>
@@ -455,14 +491,12 @@
                             <button type="button" class="btn btn-sm btn-outline-primary add-day-btn mt-1"><i class="fa fa-plus"></i> Add Day</button>
                         </div>
 
-                        {{-- INCLUSIONS --}}
                         <div class="col-12 col-md-4">
                             <label class="fw-bold small text-success">INCLUSIONS</label>
                             <div id="edit_inclusions_container"></div>
                             <button type="button" class="btn btn-sm btn-outline-success add-inclusion-btn mt-1"><i class="fa fa-plus"></i> Add</button>
                         </div>
 
-                        {{-- EXCLUSIONS --}}
                         <div class="col-12 col-md-4">
                             <label class="fw-bold small text-danger">EXCLUSIONS</label>
                             <div id="edit_exclusions_container"></div>
@@ -556,10 +590,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelectorAll('.transport-wrapper').forEach(initWrapper);
 
-    /* ── Global click handler ─────────────────────────────────────────── */
     document.addEventListener('click', function(e) {
 
-        /* Transport trigger */
         if (e.target.closest('.transport-trigger')) {
             e.stopPropagation();
             const wrapper  = e.target.closest('.transport-wrapper');
@@ -570,7 +602,6 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        /* Transport option selected */
         if (e.target.closest('.transport-option')) {
             e.stopPropagation();
             const option    = e.target.closest('.transport-option');
@@ -590,7 +621,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         closeAllDropdowns();
 
-        /* Add Day */
         if (e.target.closest('.add-day-btn')) {
             const modal     = e.target.closest('.modal');
             const container = modal.querySelector('.itinerary_container') || modal.querySelector('#edit_itinerary_container');
@@ -611,7 +641,6 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        /* Add Inclusion / Exclusion */
         if (e.target.closest('.add-inclusion-btn, .add-exclusion-btn')) {
             const isInc    = !!e.target.closest('.add-inclusion-btn');
             const modal    = e.target.closest('.modal');
@@ -628,7 +657,6 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        /* Remove Day */
         if (e.target.closest('.remove-day')) {
             const item      = e.target.closest('.itinerary-item');
             const container = item.parentElement;
@@ -637,13 +665,11 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        /* Remove Inclusion / Exclusion */
         if (e.target.closest('.remove-item')) {
             e.target.closest('.list-item').remove();
             return;
         }
 
-        /* Edit package button */
         if (e.target.closest('.edit-package-btn')) {
             const id = e.target.closest('.edit-package-btn').dataset.id;
             document.getElementById('editPackageForm').action = `/admin/packages/${id}`;
@@ -712,13 +738,10 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        /* Archive trigger */
         if (e.target.closest('.btn-archive-trigger')) {
             const btn = e.target.closest('.btn-archive-trigger');
-
             document.getElementById('archive_pkg_name').innerText = btn.dataset.name;
             document.getElementById('archiveForm').action         = btn.dataset.url;
-
             new bootstrap.Modal(document.getElementById('archiveConfirmModal')).show();
         }
     });
