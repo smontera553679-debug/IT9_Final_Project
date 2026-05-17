@@ -2,33 +2,21 @@
 
 @section('content')
 <style>
-    /* ══════════════════════════════════════
-       PAYMENTS — THEME-AWARE STYLES
-    ══════════════════════════════════════ */
-
     .pay-wrap .page-title { color: var(--text-title); transition: color 0.3s ease; }
 
-    /* ── Card ── */
     .pay-wrap .card {
         background: var(--bg-navbar);
         border: 1px solid var(--border-color) !important;
-        border-radius: 15px;
-        overflow: visible;
+        border-radius: 15px; overflow: visible;
         transition: background 0.3s ease, border-color 0.3s ease;
     }
-    .pay-wrap .table-responsive {
-        background: var(--bg-navbar);
-        transition: background 0.3s ease;
-    }
+    .pay-wrap .table-responsive { background: var(--bg-navbar); transition: background 0.3s ease; }
 
-    /* ── thead ── */
     .pay-wrap .tbl-head {
         background-color: var(--border-head);
         border-bottom: 2px solid var(--border-color);
         transition: background-color 0.3s ease, border-color 0.3s ease;
-        position: sticky;
-        top: 0;
-        z-index: 10;
+        position: sticky; top: 0; z-index: 10;
     }
     .pay-wrap .tbl-head th {
         color: var(--text-muted);
@@ -38,7 +26,6 @@
         --bs-table-bg: transparent !important;
     }
 
-    /* ── tbody rows ── */
     .pay-wrap .table > :not(caption) > * > *,
     .pay-wrap .table tbody tr td {
         background-color: var(--bg-navbar) !important;
@@ -48,47 +35,53 @@
         --bs-table-color: var(--text-primary) !important;
         transition: background-color 0.15s ease, color 0.3s ease, border-color 0.3s ease;
     }
-    .pay-wrap .table-hover tbody tr:hover > * {
-        background-color: var(--notif-hover) !important;
-    }
+    .pay-wrap .table-hover tbody tr:hover > * { background-color: var(--notif-hover) !important; }
 
-    /* ── Outer table wrapper ── */
     .pay-wrap .table-outer {
-        overflow-x: auto;
-        overflow-y: auto;
-        max-height: 600px;
+        overflow-x: auto; overflow-y: auto; max-height: 600px;
         -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
+        scrollbar-width: none; -ms-overflow-style: none;
     }
     .pay-wrap .table-outer::-webkit-scrollbar { display: none; }
+    .pay-wrap .table-clip { border-radius: 15px 15px 0 0; overflow: hidden; }
 
-    /* ── Inner clip wrapper ── */
-    .pay-wrap .table-clip {
-        border-radius: 15px;
-        overflow: hidden;
-    }
-
-    /* ── Pay ID ── */
     .pay-wrap .pay-id { color: #a78bfa; font-weight: 700; }
-
-    /* ── Muted text ── */
     .pay-wrap .col-muted { color: var(--text-muted); transition: color 0.3s ease; }
-
-    /* ── Cancellation reason badge ── */
     .pay-wrap .cancel-reason-badge {
         background: var(--bg-body) !important;
         border-color: var(--border-color) !important;
         color: #ef4444 !important;
         transition: background 0.3s ease, border-color 0.3s ease;
     }
-
-    /* ── Empty state ── */
     .pay-wrap .empty-state { color: var(--text-time); font-size: 0.88rem; transition: color 0.3s ease; }
 
-    /* ══════════════════════════════════════
-       PROOF & REJECT MODALS — THEME-AWARE
-    ══════════════════════════════════════ */
+    /* ── Pagination ── */
+    .pagination-nav {
+        display: flex; align-items: center; justify-content: space-between;
+        flex-wrap: wrap; gap: 10px; padding: 14px 20px;
+        border-top: 1px solid var(--border-item);
+        background: var(--bg-navbar);
+        border-radius: 0 0 15px 15px;
+        transition: background 0.3s ease;
+    }
+    .pagination-info { font-size: 0.78rem; color: var(--text-muted); transition: color 0.3s ease; }
+    .pagination-info span { color: var(--text-title); font-weight: 600; }
+    .pagination-links { display: flex; align-items: center; gap: 4px; }
+    .page-btn {
+        min-width: 34px; height: 34px; border-radius: 8px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-navbar); color: var(--text-primary);
+        font-size: 0.82rem; font-weight: 600;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; transition: all 0.15s ease; text-decoration: none;
+    }
+    .page-btn:hover { background: var(--notif-hover); border-color: #a78bfa; color: #a78bfa; }
+    .page-btn.active { background: #a78bfa; border-color: #a78bfa; color: #fff; box-shadow: 0 3px 10px rgba(167,139,250,0.35); }
+    .page-btn.disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+    .page-btn.nav-btn { padding: 0 12px; font-size: 0.78rem; }
+    .page-dots { color: var(--text-muted); font-size: 0.82rem; padding: 0 2px; transition: color 0.3s ease; }
+
+    /* ── Proof & Reject Modals ── */
     .proof-overlay {
         display: none; position: fixed;
         top: 0; left: 0; width: 100%; height: 100%;
@@ -96,7 +89,6 @@
         justify-content: center; align-items: center;
         backdrop-filter: blur(5px); padding: 16px;
     }
-
     .proof-content {
         background: var(--bg-dropdown);
         border: 1px solid var(--border-light);
@@ -106,7 +98,6 @@
         animation: zoomIn 0.3s ease-out;
         transition: background 0.3s ease;
     }
-
     .proof-header {
         padding: 14px 18px; display: flex;
         justify-content: space-between; align-items: center;
@@ -114,12 +105,7 @@
         border-bottom: 1px solid var(--border-color);
         transition: background 0.3s ease, border-color 0.3s ease;
     }
-
-    .proof-header h5 {
-        color: var(--text-title);
-        transition: color 0.3s ease;
-    }
-
+    .proof-header h5 { color: var(--text-title); transition: color 0.3s ease; }
     .btn-modal-back {
         border: none; background: #444; color: white;
         padding: 5px 14px; border-radius: 20px;
@@ -127,20 +113,14 @@
         transition: background 0.2s ease;
     }
     .btn-modal-back:hover { background: #555; }
-
     .proof-body {
         padding: 18px; text-align: center;
         max-height: 70vh; overflow-y: auto;
     }
     .proof-body img { max-width: 100%; height: auto; border-radius: 10px; }
-
     .proof-body .form-check-label { color: var(--text-primary); transition: color 0.3s ease; }
     .proof-body p.text-muted { color: var(--text-muted) !important; }
-
-    @keyframes zoomIn {
-        from { transform: scale(0.9); opacity: 0; }
-        to   { transform: scale(1); opacity: 1; }
-    }
+    @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 </style>
 
 <div class="pay-wrap container-fluid py-3 py-md-4">
@@ -233,9 +213,7 @@
                                         <div class="d-flex gap-1 justify-content-center flex-wrap">
                                             <form action="{{ route('payments.confirm', $payment->id) }}" method="POST">
                                                 @csrf
-                                                <button type="submit" class="btn btn-sm fw-bold rounded-pill px-3 shadow-sm btn-success">
-                                                    Confirm
-                                                </button>
+                                                <button type="submit" class="btn btn-sm fw-bold rounded-pill px-3 shadow-sm btn-success">Confirm</button>
                                             </form>
                                             <button type="button"
                                                     onclick="openRejectModal({{ $payment->id }})"
@@ -258,6 +236,8 @@
                     </table>
                 </div>
             </div>
+
+            @include('components.pagination', ['paginator' => $payments, 'label' => 'records'])
         </div>
     </div>
 </div>

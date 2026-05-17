@@ -2,42 +2,30 @@
 
 @section('content')
 <style>
-    .dest-wrap .page-title {
-        color: var(--text-title);
-        transition: color 0.3s ease;
-    }
+    .dest-wrap .page-title { color: var(--text-title); transition: color 0.3s ease; }
 
     .dest-wrap .card {
         background: var(--bg-navbar);
         border: 1px solid var(--border-color) !important;
-        border-radius: 15px;
-        overflow: visible;
+        border-radius: 15px; overflow: visible;
         transition: background 0.3s ease, border-color 0.3s ease;
     }
 
     .dest-wrap .tbl-head-cell {
         color: var(--text-muted);
-        font-size: 0.72rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        font-weight: 700;
+        font-size: 0.72rem; letter-spacing: 0.08em;
+        text-transform: uppercase; font-weight: 700;
     }
-
     .dest-wrap .tbl-head {
         background-color: var(--border-head);
         border-bottom: 2px solid var(--border-color);
         transition: background-color 0.3s ease, border-color 0.3s ease;
-        position: sticky;
-        top: 0;
-        z-index: 10;
+        position: sticky; top: 0; z-index: 10;
     }
-
     .dest-wrap .tbl-head th {
         color: var(--text-muted);
-        font-size: 0.72rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        font-weight: 700;
+        font-size: 0.72rem; letter-spacing: 0.08em;
+        text-transform: uppercase; font-weight: 700;
         background-color: var(--border-head) !important;
         --bs-table-bg: transparent !important;
     }
@@ -51,40 +39,28 @@
         --bs-table-color: var(--text-primary) !important;
         transition: background-color 0.15s ease, color 0.3s ease, border-color 0.3s ease;
     }
-
-    .dest-wrap .table-hover tbody tr:hover > * {
-        background-color: var(--notif-hover) !important;
-    }
+    .dest-wrap .table-hover tbody tr:hover > * { background-color: var(--notif-hover) !important; }
 
     .dest-wrap .swipe-container {
-        display: flex;
-        overflow-x: auto;
-        overflow-y: hidden;
+        display: flex; overflow-x: auto; overflow-y: hidden;
         scroll-snap-type: x mandatory;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
+        scrollbar-width: none; -ms-overflow-style: none;
         background-color: var(--bg-navbar);
         transition: background-color 0.3s ease;
     }
     .dest-wrap .swipe-container::-webkit-scrollbar { display: none; }
 
     .dest-wrap .swipe-content {
-        min-width: 100%;
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        padding: 1rem 0;
-        scroll-snap-align: start;
+        min-width: 100%; flex-shrink: 0;
+        display: flex; align-items: center;
+        padding: 1rem 0; scroll-snap-align: start;
         border-bottom: 1px solid var(--border-item);
         transition: border-color 0.3s ease;
     }
 
     .dest-wrap .swipe-actions {
-        display: flex;
-        flex-shrink: 0;
-        scroll-snap-align: end;
-        align-items: center;
-        padding: 0 1rem;
+        display: flex; flex-shrink: 0; scroll-snap-align: end;
+        align-items: center; padding: 0 1rem;
         background-color: var(--border-head);
         border-left: 1px solid var(--border-color);
         border-bottom: 1px solid var(--border-item);
@@ -93,67 +69,65 @@
     }
 
     .dest-wrap .action-btn {
-        width: 40px; height: 40px;
-        border-radius: 50%;
+        width: 40px; height: 40px; border-radius: 50%;
         display: flex; align-items: center; justify-content: center;
         margin: 0 4px; color: white !important;
         text-decoration: none; border: none;
         box-shadow: 0 4px 6px rgba(0,0,0,0.15);
-        transition: transform 0.2s ease;
-        cursor: pointer;
+        transition: transform 0.2s ease; cursor: pointer;
     }
     .dest-wrap .action-btn:active { transform: scale(0.9); }
 
     .dest-wrap .table-outer {
-        overflow-x: auto;
-        overflow-y: auto;
-        max-height: 600px;
+        overflow-x: auto; overflow-y: auto; max-height: 600px;
         -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
+        scrollbar-width: none; -ms-overflow-style: none;
     }
     .dest-wrap .table-outer::-webkit-scrollbar { display: none; }
+    .dest-wrap .table-clip { border-radius: 15px 15px 0 0; overflow: hidden; }
 
-    .dest-wrap .table-clip {
-        border-radius: 15px;
-        overflow: hidden;
-    }
-
-    .dest-wrap .cell-text {
-        color: var(--text-title);
-        font-weight: 600;
-        transition: color 0.3s ease;
-    }
-
-    .dest-wrap .empty-state {
-        color: var(--text-time);
-        font-size: 0.88rem;
-        transition: color 0.3s ease;
-    }
+    .dest-wrap .cell-text { color: var(--text-title); font-weight: 600; transition: color 0.3s ease; }
+    .dest-wrap .empty-state { color: var(--text-time); font-size: 0.88rem; transition: color 0.3s ease; }
 
     .dest-wrap .table-scroll-strip {
-        width: 100%;
-        overflow-x: auto;
-        overflow-y: hidden;
-        height: 12px;
-        margin-top: 8px;
-        border-radius: 10px;
-        scrollbar-width: thin;
-        scrollbar-color: var(--text-muted) var(--border-head);
+        width: 100%; overflow-x: auto; overflow-y: hidden;
+        height: 12px; margin-top: 8px; border-radius: 10px;
+        scrollbar-width: thin; scrollbar-color: var(--text-muted) var(--border-head);
         cursor: grab;
     }
     .dest-wrap .table-scroll-strip:active { cursor: grabbing; }
     .dest-wrap .table-scroll-strip::-webkit-scrollbar { height: 12px; }
-    .dest-wrap .table-scroll-strip::-webkit-scrollbar-track {
-        background: var(--border-head);
-        border-radius: 10px;
-    }
-    .dest-wrap .table-scroll-strip::-webkit-scrollbar-thumb {
-        background: var(--text-muted);
-        border-radius: 10px;
-    }
+    .dest-wrap .table-scroll-strip::-webkit-scrollbar-track { background: var(--border-head); border-radius: 10px; }
+    .dest-wrap .table-scroll-strip::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 10px; }
     .dest-wrap .table-scroll-strip-inner { height: 1px; }
 
+    /* ── Pagination ── */
+    .pagination-nav {
+        display: flex; align-items: center; justify-content: space-between;
+        flex-wrap: wrap; gap: 10px; padding: 14px 20px;
+        border-top: 1px solid var(--border-item);
+        background: var(--bg-navbar);
+        border-radius: 0 0 15px 15px;
+        transition: background 0.3s ease;
+    }
+    .pagination-info { font-size: 0.78rem; color: var(--text-muted); transition: color 0.3s ease; }
+    .pagination-info span { color: var(--text-title); font-weight: 600; }
+    .pagination-links { display: flex; align-items: center; gap: 4px; }
+    .page-btn {
+        min-width: 34px; height: 34px; border-radius: 8px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-navbar); color: var(--text-primary);
+        font-size: 0.82rem; font-weight: 600;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; transition: all 0.15s ease; text-decoration: none;
+    }
+    .page-btn:hover { background: var(--notif-hover); border-color: #0ea5e9; color: #0ea5e9; }
+    .page-btn.active { background: #0ea5e9; border-color: #0ea5e9; color: #fff; box-shadow: 0 3px 10px rgba(14,165,233,0.3); }
+    .page-btn.disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+    .page-btn.nav-btn { padding: 0 12px; font-size: 0.78rem; }
+    .page-dots { color: var(--text-muted); font-size: 0.82rem; padding: 0 2px; transition: color 0.3s ease; }
+
+    /* ── Modals ── */
     .dest-wrap-modal .modal-content {
         background: var(--bg-dropdown) !important;
         border: 1px solid var(--border-light) !important;
@@ -162,9 +136,7 @@
     }
     .dest-wrap-modal .modal-title,
     .dest-wrap-modal .form-label,
-    .dest-wrap-modal h5 {
-        color: var(--text-title) !important;
-    }
+    .dest-wrap-modal h5 { color: var(--text-title) !important; }
     .dest-wrap-modal .form-control,
     .dest-wrap-modal .form-select {
         background: var(--bg-body) !important;
@@ -180,17 +152,11 @@
     .dest-wrap-modal p.text-muted { color: var(--text-muted) !important; }
 
     .archive-warning-box {
-        background: #fffbeb;
-        border: 1px solid #fde68a;
-        border-radius: 10px;
-        padding: 12px 14px;
-        font-size: 0.82rem;
-        color: #92400e;
-        margin: 12px 0 0;
-        display: flex;
-        gap: 8px;
-        align-items: flex-start;
-        line-height: 1.5;
+        background: #fffbeb; border: 1px solid #fde68a;
+        border-radius: 10px; padding: 12px 14px;
+        font-size: 0.82rem; color: #92400e;
+        margin: 12px 0 0; display: flex;
+        gap: 8px; align-items: flex-start; line-height: 1.5;
     }
     [data-theme="dark"] .archive-warning-box {
         background: rgba(251,191,36,0.1);
@@ -199,34 +165,13 @@
     }
     .archive-warning-box i { margin-top: 2px; flex-shrink: 0; }
 
-    /* ── MOBILE: full-width horizontal scroll + swipe-to-reveal actions ── */
     @media (max-width: 768px) {
-
-        .dest-wrap .table-outer {
-            overflow-x: auto !important;
-            -webkit-overflow-scrolling: touch !important;
-        }
-
-        .dest-wrap .table-outer > div {
-            min-width: 440px;
-        }
-
-        .dest-wrap .tbl-head {
-            min-width: 440px;
-        }
-
-        .dest-wrap .swipe-container {
-            min-width: 440px;
-        }
-
-        .dest-wrap .swipe-content {
-            min-width: 440px !important;
-        }
-
-        /* Show scroll strip on mobile */
-        .dest-wrap .table-scroll-strip {
-            display: block !important;
-        }
+        .dest-wrap .table-outer { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
+        .dest-wrap .table-outer > div,
+        .dest-wrap .tbl-head,
+        .dest-wrap .swipe-container,
+        .dest-wrap .swipe-content { min-width: 440px !important; }
+        .dest-wrap .table-scroll-strip { display: block !important; }
     }
 </style>
 
@@ -244,7 +189,6 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     @endif
-
     @if(session('error'))
         <div class="alert alert-danger shadow-sm alert-dismissible fade show">
             {{ session('error') }}
@@ -317,15 +261,17 @@
                             </div>
                         </div>
                         @empty
-                            <div class="text-center py-5 empty-state">
-                                <i class="fas fa-map-marked-alt mb-2 d-block" style="font-size:2rem; opacity:0.3;"></i>
-                                No destinations found.
-                            </div>
+                        <div class="text-center py-5 empty-state">
+                            <i class="fas fa-map-marked-alt mb-2 d-block" style="font-size:2rem; opacity:0.3;"></i>
+                            No destinations found.
+                        </div>
                         @endforelse
 
                     </div>
                 </div>
             </div>
+
+            @include('components.pagination', ['paginator' => $destinations, 'label' => 'destinations'])
         </div>
     </div>
 
@@ -417,12 +363,10 @@
             <div class="modal-body p-4 text-center">
                 <div class="text-warning mb-3"><i class="fas fa-box-archive fa-3x"></i></div>
                 <h5 class="fw-bold">Archive Destination?</h5>
-
                 <p class="text-muted small mb-0" id="archiveDefaultMsg">
                     Are you sure you want to archive
                     <span id="archive_dest_name" class="fw-bold"></span>?
                 </p>
-
                 <div id="archiveWarningBox" class="archive-warning-box text-start d-none">
                     <i class="fas fa-triangle-exclamation"></i>
                     <span>
@@ -431,7 +375,6 @@
                         Existing bookings will not be affected. Continue?
                     </span>
                 </div>
-
                 <form id="archiveForm" action="" method="POST" class="mt-3">
                     @csrf
                     <input type="hidden" name="_method" value="DELETE">
@@ -448,7 +391,6 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    /* ── Edit modal ── */
     document.querySelectorAll('.btn-edit').forEach(button => {
         button.addEventListener('click', function () {
             document.getElementById('edit_title').value       = this.dataset.title || '';
@@ -459,19 +401,16 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    /* ── Archive modal — with AJAX pre-check ── */
     document.querySelectorAll('.btn-archive-trigger').forEach(button => {
         button.addEventListener('click', async function () {
             const name       = this.dataset.name;
             const archiveUrl = this.dataset.url;
             const checkUrl   = this.dataset.checkUrl;
-
-            const form = document.getElementById('archiveForm');
+            const form       = document.getElementById('archiveForm');
 
             document.getElementById('archive_dest_name').innerText = name;
             document.getElementById('archiveWarningBox').classList.add('d-none');
             document.getElementById('archiveDefaultMsg').classList.remove('d-none');
-
             form.setAttribute('action', archiveUrl);
             form.querySelector('input[name="_method"]').value = 'DELETE';
 
@@ -479,49 +418,29 @@ document.addEventListener('DOMContentLoaded', function () {
             modal.show();
 
             try {
-                const res  = await fetch(checkUrl, {
-                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
-                });
+                const res  = await fetch(checkUrl, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
                 const data = await res.json();
-
                 if (data.has_active_packages) {
                     document.getElementById('archiveDefaultMsg').classList.add('d-none');
                     document.getElementById('archiveWarningBox').classList.remove('d-none');
                 }
             } catch (e) {
-                console.warn('Archive check failed, proceeding with default message.', e);
+                console.warn('Archive check failed.', e);
             }
         });
     });
 
-    /* ── Scroll strip synced to tableOuter (desktop only) ── */
     const outer      = document.getElementById('tableOuter');
     const strip      = document.getElementById('tableScrollStrip');
     const stripInner = document.getElementById('tableScrollStripInner');
 
-    function syncStripWidth() {
-        stripInner.style.width = outer.scrollWidth + 'px';
-    }
+    function syncStripWidth() { stripInner.style.width = outer.scrollWidth + 'px'; }
     syncStripWidth();
     new ResizeObserver(syncStripWidth).observe(outer);
 
-    let fromOuter = false;
-    let fromStrip = false;
-
-    outer.addEventListener('scroll', () => {
-        if (fromStrip) return;
-        fromOuter = true;
-        strip.scrollLeft = outer.scrollLeft;
-        fromOuter = false;
-    });
-
-    strip.addEventListener('scroll', () => {
-        if (fromOuter) return;
-        fromStrip = true;
-        outer.scrollLeft = strip.scrollLeft;
-        fromStrip = false;
-    });
-
+    let fromOuter = false, fromStrip = false;
+    outer.addEventListener('scroll', () => { if (fromStrip) return; fromOuter = true; strip.scrollLeft = outer.scrollLeft; fromOuter = false; });
+    strip.addEventListener('scroll', () => { if (fromOuter) return; fromStrip = true; outer.scrollLeft = strip.scrollLeft; fromStrip = false; });
 });
 </script>
 @endsection

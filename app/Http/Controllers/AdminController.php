@@ -110,7 +110,7 @@ class AdminController extends Controller
 
     public function destinations()
     {
-        $destinations = Destination::all();
+        $destinations = Destination::latest()->paginate(5);
         return view('admin.destinations', compact('destinations'));
     }
 
@@ -177,13 +177,10 @@ class AdminController extends Controller
     {
         $destination = Destination::findOrFail($id);
 
-        // Set all active packages to inactive — do NOT archive/soft-delete them.
-        // They stay visible in the packages table but locked until destination is restored.
         Package::where('destination_id', $destination->id)
                ->where('status', 'active')
                ->update(['status' => 'inactive']);
 
-        // Soft-delete only the destination
         $destination->delete();
 
         return back()->with('success', 'Destination archived. Its packages have been set to inactive and locked until the destination is restored.');
@@ -195,8 +192,10 @@ class AdminController extends Controller
 
     public function packages()
     {
-        // Include packages whose destination is soft-deleted (archived)
-        $packages     = Package::with(['destination' => fn($q) => $q->withTrashed()])->get();
+        $packages = Package::with(['destination' => fn($q) => $q->withTrashed()])
+            ->latest()
+            ->paginate(5);
+
         $destinations = Destination::where('status', 'active')->get();
 
         return view('admin.packages', compact('packages', 'destinations'));
@@ -281,7 +280,6 @@ class AdminController extends Controller
     public function destroyPackage($id)
     {
         $package = Package::findOrFail($id);
-
         $package->update(['status' => 'inactive']);
         $package->delete();
 
@@ -304,7 +302,6 @@ class AdminController extends Controller
     {
         $package = Package::findOrFail($id);
 
-        // Block reactivation if the destination is archived
         if ($package->status === 'inactive') {
             $destination = Destination::withTrashed()->find($package->destination_id);
             if ($destination && $destination->trashed()) {
@@ -367,13 +364,13 @@ class AdminController extends Controller
 
     public function bookings()
     {
-        $bookings = Booking::with(['user', 'package', 'payment'])->latest()->get();
+        $bookings = Booking::with(['user', 'package', 'payment'])->latest()->paginate(5);
         return view('admin.bookings', compact('bookings'));
     }
 
     public function payments()
     {
-        $payments = Payment::with(['booking.user', 'booking.package'])->latest()->get();
+        $payments = Payment::with(['booking.user', 'booking.package'])->latest()->paginate(5);
         return view('admin.payments', compact('payments'));
     }
 
@@ -400,9 +397,7 @@ class AdminController extends Controller
 
     public function rejectPayment(Request $request, $id)
     {
-        $request->validate([
-            'reject_reason' => 'required|string',
-        ]);
+        $request->validate(['reject_reason' => 'required|string']);
 
         $payment = Payment::findOrFail($id);
 
@@ -474,7 +469,8 @@ class AdminController extends Controller
         $customers = User::where('role', 'customer')
             ->where('username', '!=', 'admin')
             ->withCount('bookings')
-            ->get();
+            ->latest()
+            ->paginate(5);
 
         return view('admin.customers', compact('customers'));
     }

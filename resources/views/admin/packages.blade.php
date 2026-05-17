@@ -7,24 +7,20 @@
     .pkg-wrap .card {
         background: var(--bg-navbar);
         border: 1px solid var(--border-color) !important;
-        border-radius: 15px;
-        overflow: visible;
+        border-radius: 15px; overflow: visible;
         transition: background 0.3s ease, border-color 0.3s ease;
     }
-
     .pkg-wrap .tbl-head {
         background-color: var(--border-head);
         border-bottom: 2px solid var(--border-color);
         transition: background-color 0.3s ease, border-color 0.3s ease;
         position: sticky; top: 0; z-index: 10;
     }
-
     .pkg-wrap .tbl-head-cell {
         color: var(--text-muted);
         font-size: 0.72rem; letter-spacing: 0.08em;
         text-transform: uppercase; font-weight: 700;
     }
-
     .pkg-wrap .swipe-container {
         display: flex; overflow-x: auto; overflow-y: hidden;
         scroll-snap-type: x mandatory;
@@ -33,7 +29,6 @@
         transition: background-color 0.3s ease;
     }
     .pkg-wrap .swipe-container::-webkit-scrollbar { display: none; }
-
     .pkg-wrap .swipe-content {
         min-width: 100%; width: 100%; flex-shrink: 0;
         display: flex; align-items: center;
@@ -41,7 +36,6 @@
         border-bottom: 1px solid var(--border-item);
         transition: border-color 0.3s ease;
     }
-
     .pkg-wrap .swipe-actions {
         display: flex; flex-shrink: 0; scroll-snap-align: end;
         align-items: center; padding: 0 0.75rem;
@@ -51,7 +45,6 @@
         gap: 6px;
         transition: background-color 0.3s ease, border-color 0.3s ease;
     }
-
     .pkg-wrap .action-btn {
         width: 40px; height: 40px; border-radius: 50%;
         display: flex; align-items: center; justify-content: center;
@@ -61,51 +54,40 @@
         transition: transform 0.2s ease;
     }
     .pkg-wrap .action-btn:active { transform: scale(0.9); }
-
     .pkg-wrap .pkg-col {
         display: flex; align-items: center; justify-content: center;
         font-size: 0.9rem; font-family: inherit;
         overflow: hidden; text-align: center;
         color: var(--text-title); transition: color 0.3s ease;
     }
-
     .pkg-wrap .image-preview-box {
         width: 80px; height: 80px;
         background: var(--bg-body); border-radius: 8px;
         overflow: hidden; flex-shrink: 0;
         transition: background 0.3s ease;
     }
-
     .pkg-wrap .table-outer {
         overflow-x: auto; overflow-y: auto; max-height: 600px;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none; -ms-overflow-style: none;
     }
     .pkg-wrap .table-outer::-webkit-scrollbar { display: none; }
-    .pkg-wrap .table-clip { border-radius: 15px; overflow: hidden; }
+    .pkg-wrap .table-clip { border-radius: 15px 15px 0 0; overflow: hidden; }
 
     .itinerary-item, .list-item { animation: fadeIn 0.3s ease; }
     @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
     .pkg-wrap .empty-state { color: var(--text-time); font-size: 0.88rem; transition: color 0.3s ease; }
 
-    /* Locked row — destination is archived */
     .pkg-wrap .swipe-content.dest-archived-row {
         opacity: 0.6;
-        background: repeating-linear-gradient(
-            135deg,
-            transparent,
-            transparent 6px,
-            rgba(0,0,0,0.025) 6px,
-            rgba(0,0,0,0.025) 12px
-        );
+        background: repeating-linear-gradient(135deg, transparent, transparent 6px, rgba(0,0,0,0.025) 6px, rgba(0,0,0,0.025) 12px);
     }
     .dest-locked-badge {
         display: inline-flex; align-items: center; gap: 4px;
         font-size: 0.62rem; font-weight: 600;
         padding: 2px 8px; border-radius: 100px;
         background: rgba(99,102,241,0.1); color: #6366f1;
-        border: 1px solid rgba(99,102,241,0.2);
-        white-space: nowrap;
+        border: 1px solid rgba(99,102,241,0.2); white-space: nowrap;
     }
     .status-locked-btn {
         display: inline-flex; align-items: center; gap: 5px;
@@ -116,11 +98,9 @@
         opacity: 0.75; text-transform: uppercase;
         letter-spacing: 0.03em; white-space: nowrap;
     }
-    .pkg-wrap .action-btn.btn-disabled {
-        opacity: 0.35; cursor: not-allowed; pointer-events: none;
-    }
+    .pkg-wrap .action-btn.btn-disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
 
-    /* ══ TRANSPORT PICKER ══ */
+    /* ── Transport picker ── */
     .transport-wrapper { position: relative; flex-shrink: 0; }
     .transport-wrapper select { position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0; }
     .transport-trigger {
@@ -150,7 +130,33 @@
     .transport-option .t-icon { font-size: 1.05rem; width: 22px; text-align: center; }
     .transport-option .t-label { color: var(--text-title); }
 
-    /* ══ MODALS ══ */
+    /* ── Pagination ── */
+    .pagination-nav {
+        display: flex; align-items: center; justify-content: space-between;
+        flex-wrap: wrap; gap: 10px; padding: 14px 20px;
+        border-top: 1px solid var(--border-item);
+        background: var(--bg-navbar);
+        border-radius: 0 0 15px 15px;
+        transition: background 0.3s ease;
+    }
+    .pagination-info { font-size: 0.78rem; color: var(--text-muted); transition: color 0.3s ease; }
+    .pagination-info span { color: var(--text-title); font-weight: 600; }
+    .pagination-links { display: flex; align-items: center; gap: 4px; }
+    .page-btn {
+        min-width: 34px; height: 34px; border-radius: 8px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-navbar); color: var(--text-primary);
+        font-size: 0.82rem; font-weight: 600;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; transition: all 0.15s ease; text-decoration: none;
+    }
+    .page-btn:hover { background: var(--notif-hover); border-color: #3b82f6; color: #3b82f6; }
+    .page-btn.active { background: #3b82f6; border-color: #3b82f6; color: #fff; box-shadow: 0 3px 10px rgba(59,130,246,0.3); }
+    .page-btn.disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+    .page-btn.nav-btn { padding: 0 12px; font-size: 0.78rem; }
+    .page-dots { color: var(--text-muted); font-size: 0.82rem; padding: 0 2px; transition: color 0.3s ease; }
+
+    /* ── Modals ── */
     .pkg-modal .modal-content {
         background: var(--bg-dropdown) !important;
         border: 1px solid var(--border-light) !important;
@@ -187,48 +193,28 @@
         color: var(--btn-color) !important;
     }
     .pkg-modal p.text-muted { color: var(--text-muted) !important; }
-    .pkg-modal .image-preview-box {
-        background: var(--bg-body) !important;
-        border-color: var(--border-color) !important;
-    }
-    .pkg-modal .duration-display {
-        background: var(--bg-body) !important;
-        border-color: var(--border-color) !important;
-        color: #6f42c1 !important;
-    }
+    .pkg-modal .image-preview-box { background: var(--bg-body) !important; border-color: var(--border-color) !important; }
+    .pkg-modal .duration-display { background: var(--bg-body) !important; border-color: var(--border-color) !important; color: #6f42c1 !important; }
 
-    /* ══ MOBILE ══ */
     @media (max-width: 768px) {
         .pkg-wrap .table-outer { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
-        .pkg-wrap .table-outer > div { min-width: 640px; }
-        .pkg-wrap .tbl-head        { min-width: 640px; }
-        .pkg-wrap .swipe-container { min-width: 640px; }
-        .pkg-wrap .swipe-content   { min-width: 640px !important; }
+        .pkg-wrap .table-outer > div,
+        .pkg-wrap .tbl-head,
+        .pkg-wrap .swipe-container,
+        .pkg-wrap .swipe-content { min-width: 640px !important; }
     }
     @media (max-width: 576px) {
-        .pkg-modal .modal-dialog {
-            margin: 0 !important; max-width: 100% !important;
-            width: 100% !important; min-height: 100% !important;
-            align-items: flex-start !important;
-        }
-        .pkg-modal .modal-content {
-            border-radius: 0 !important; min-height: 100vh !important;
-            display: flex; flex-direction: column;
-        }
-        .pkg-modal .modal-body {
-            flex: 1 1 auto !important; overflow-y: auto !important;
-            -webkit-overflow-scrolling: touch; padding: 12px 14px !important;
-        }
-        .pkg-modal .modal-header,
-        .pkg-modal .modal-footer { flex-shrink: 0; padding: 12px 14px !important; }
+        .pkg-modal .modal-dialog { margin: 0 !important; max-width: 100% !important; width: 100% !important; min-height: 100% !important; align-items: flex-start !important; }
+        .pkg-modal .modal-content { border-radius: 0 !important; min-height: 100vh !important; display: flex; flex-direction: column; }
+        .pkg-modal .modal-body { flex: 1 1 auto !important; overflow-y: auto !important; -webkit-overflow-scrolling: touch; padding: 12px 14px !important; }
+        .pkg-modal .modal-header, .pkg-modal .modal-footer { flex-shrink: 0; padding: 12px 14px !important; }
         .pkg-modal .modal-header { flex-wrap: wrap; gap: 4px; }
         .pkg-modal .duration-display { font-size: 0.7rem; }
         .pkg-modal .col-6 { flex: 0 0 50% !important; max-width: 50% !important; }
         .pkg-modal .col-12.col-md-4 { flex: 0 0 100% !important; max-width: 100% !important; }
         .pkg-modal .input-group .input-group-text { font-size: 0.72rem; padding: 4px 7px; white-space: nowrap; }
         .pkg-modal .transport-trigger { width: 34px !important; font-size: 0.95rem !important; }
-        .pkg-modal #add_imagePreview,
-        .pkg-modal #edit_imagePreview { width: 52px !important; height: 52px !important; min-width: 52px; }
+        .pkg-modal #add_imagePreview, .pkg-modal #edit_imagePreview { width: 52px !important; height: 52px !important; min-width: 52px; }
     }
 </style>
 
@@ -266,9 +252,9 @@
 
                         {{-- HEADER --}}
                         <div class="tbl-head d-flex align-items-center py-3">
-                            <div style="flex:1; min-width:70px;"   class="text-center tbl-head-cell">Favorite</div>
-                            <div style="flex:2; min-width:130px;"  class="text-center tbl-head-cell">Package</div>
-                            <div style="flex:2; min-width:120px;"  class="text-center tbl-head-cell">Destination</div>
+                            <div style="flex:1; min-width:70px;"    class="text-center tbl-head-cell">Favorite</div>
+                            <div style="flex:2; min-width:130px;"   class="text-center tbl-head-cell">Package</div>
+                            <div style="flex:2; min-width:120px;"   class="text-center tbl-head-cell">Destination</div>
                             <div style="flex:1.5; min-width:110px;" class="text-center tbl-head-cell">Price</div>
                             <div style="flex:1.5; min-width:100px;" class="text-center tbl-head-cell">Duration</div>
                             <div style="flex:1.5; min-width:110px;" class="text-center tbl-head-cell">Status</div>
@@ -276,9 +262,7 @@
 
                         {{-- ROWS --}}
                         @forelse($packages as $package)
-                        @php
-                            $destArchived = $package->destination && $package->destination->trashed();
-                        @endphp
+                        @php $destArchived = $package->destination && $package->destination->trashed(); @endphp
                         <div class="swipe-container">
                             <div class="swipe-content {{ $destArchived ? 'dest-archived-row' : '' }}">
 
@@ -292,7 +276,7 @@
                                             @csrf
                                             <button type="submit" class="btn p-0 border-0 shadow-none">
                                                 <i class="{{ $package->is_featured ? 'fas fa-star text-warning' : 'far fa-star' }}"
-                                                   style="{{ $package->is_featured ? '' : 'color: var(--text-muted);' }} font-size:1.1rem;"></i>
+                                                   style="{{ $package->is_featured ? '' : 'color:var(--text-muted);' }} font-size:1.1rem;"></i>
                                             </button>
                                         </form>
                                     @endif
@@ -326,10 +310,8 @@
                                 {{-- STATUS --}}
                                 <div class="pkg-col" style="flex:1.5; min-width:110px;">
                                     @if($destArchived)
-                                        {{-- Locked: destination is archived, cannot reactivate --}}
                                         <span class="status-locked-btn" title="Restore the destination first to change this package's status.">
-                                            <i class="fas fa-lock" style="font-size:0.65rem;"></i>
-                                            INACTIVE
+                                            <i class="fas fa-lock" style="font-size:0.65rem;"></i> INACTIVE
                                         </span>
                                     @else
                                         <form action="{{ route('packages.toggle', $package->id) }}" method="POST">
@@ -346,7 +328,6 @@
 
                             {{-- SWIPE ACTIONS --}}
                             <div class="swipe-actions">
-                                {{-- Edit (disabled if dest archived) --}}
                                 <button type="button"
                                     class="action-btn bg-primary edit-package-btn {{ $destArchived ? 'btn-disabled' : '' }}"
                                     data-id="{{ $package->id }}"
@@ -354,8 +335,6 @@
                                     {{ $destArchived ? 'disabled' : '' }}>
                                     <i class="fa fa-edit" style="font-size:0.8rem;"></i>
                                 </button>
-
-                                {{-- Archive (disabled if dest archived) --}}
                                 <button type="button"
                                     class="action-btn bg-warning {{ $destArchived ? 'btn-disabled' : 'btn-archive-trigger' }}"
                                     data-url="{{ route('packages.destroy', $package->id) }}"
@@ -376,6 +355,8 @@
                     </div>
                 </div>
             </div>
+
+            @include('components.pagination', ['paginator' => $packages, 'label' => 'packages'])
         </div>
     </div>
 </div>
@@ -538,8 +519,7 @@
                     Existing bookings will remain valid and unaffected.
                 </p>
                 <form id="archiveForm" method="POST">
-                    @csrf
-                    @method('DELETE')
+                    @csrf @method('DELETE')
                     <div class="d-flex justify-content-center gap-2">
                         <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-warning px-4 shadow-sm">Yes, Archive</button>
@@ -564,9 +544,7 @@ document.addEventListener('DOMContentLoaded', function () {
         { value: 'bike',   emoji: '🏍️', label: 'Motorcycle' },
     ];
 
-    function getOpt(value) {
-        return TRANSPORT_OPTS.find(o => o.value === value) || TRANSPORT_OPTS[0];
-    }
+    function getOpt(value) { return TRANSPORT_OPTS.find(o => o.value === value) || TRANSPORT_OPTS[0]; }
 
     function dropdownOptionsHTML(selectedValue) {
         return TRANSPORT_OPTS.map(o => `
@@ -577,14 +555,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function initWrapper(wrapper) {
-        const val       = wrapper.dataset.selected || 'van';
-        const opt       = getOpt(val);
-        const trigger   = wrapper.querySelector('.transport-trigger');
-        const dropdown  = wrapper.querySelector('.transport-dropdown');
-        const hiddenSel = wrapper.querySelector('select');
+        const val      = wrapper.dataset.selected || 'van';
+        const opt      = getOpt(val);
+        const trigger  = wrapper.querySelector('.transport-trigger');
+        const dropdown = wrapper.querySelector('.transport-dropdown');
+        const hidden   = wrapper.querySelector('select');
         trigger.textContent      = opt.emoji;
         dropdown.innerHTML       = dropdownOptionsHTML(val);
-        hiddenSel.innerHTML      = `<option value="${val}" selected>${val}</option>`;
+        hidden.innerHTML         = `<option value="${val}" selected>${val}</option>`;
         wrapper.dataset.selected = val;
     }
 
@@ -604,14 +582,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (e.target.closest('.transport-option')) {
             e.stopPropagation();
-            const option    = e.target.closest('.transport-option');
-            const dropdown  = option.closest('.transport-dropdown');
-            const wrapper   = dropdown.closest('.transport-wrapper');
-            const value     = option.dataset.value;
-            const opt       = getOpt(value);
-            const hiddenSel = wrapper.querySelector('select');
+            const option   = e.target.closest('.transport-option');
+            const dropdown = option.closest('.transport-dropdown');
+            const wrapper  = dropdown.closest('.transport-wrapper');
+            const value    = option.dataset.value;
+            const opt      = getOpt(value);
+            const hidden   = wrapper.querySelector('select');
             wrapper.querySelector('.transport-trigger').textContent = opt.emoji;
-            hiddenSel.innerHTML      = `<option value="${value}" selected>${value}</option>`;
+            hidden.innerHTML         = `<option value="${value}" selected>${value}</option>`;
             wrapper.dataset.selected = value;
             dropdown.querySelectorAll('.transport-option').forEach(o =>
                 o.classList.toggle('selected', o.dataset.value === value));
